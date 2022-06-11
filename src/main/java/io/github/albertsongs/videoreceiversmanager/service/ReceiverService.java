@@ -1,0 +1,77 @@
+package io.github.albertsongs.videoreceiversmanager.service;
+
+import io.github.albertsongs.videoreceiversmanager.entity.ReceiverEntity;
+import io.github.albertsongs.videoreceiversmanager.exception.ReceiverIdInvalidFormat;
+import io.github.albertsongs.videoreceiversmanager.exception.ReceiverIdInvalidValue;
+import io.github.albertsongs.videoreceiversmanager.exception.ReceiverNotFound;
+import io.github.albertsongs.videoreceiversmanager.model.Receiver;
+import io.github.albertsongs.videoreceiversmanager.repository.ReceiverRepo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.*;
+
+@Service
+public final class ReceiverService {
+    @Autowired
+    private ReceiverRepo receiverRepo;
+
+    public Receiver add(Receiver receiver, String receiverIpAddress) {
+        final ReceiverEntity receiverEntity = receiver.toEntity();
+        receiverEntity.setLastIpAddress(receiverIpAddress);
+        return new Receiver(receiverRepo.save(receiverEntity));
+    }
+
+    public Optional<Receiver> getById(String id) {
+        try {
+            UUID uuid = UUID.fromString(id);
+            Optional<ReceiverEntity> receiverEntity = receiverRepo.findById(uuid);
+            return receiverEntity.isEmpty()
+                    ? Optional.empty()
+                    : Optional.of(new Receiver(receiverEntity.get()));
+        } catch (IllegalArgumentException e) {
+            throw new ReceiverIdInvalidFormat(e.getMessage());
+        }
+    }
+
+    public void delete(String id) {
+        try {
+            UUID uuid = UUID.fromString(id);
+            receiverRepo.deleteById(uuid);
+        } catch (IllegalArgumentException e) {
+            throw new ReceiverIdInvalidFormat(e.getMessage());
+        } catch (Exception e) {
+            throw new ReceiverNotFound(id);
+        }
+    }
+
+    public Iterable<Receiver> getAllWithLastIp(String remoteClientIp) {
+        List<Receiver> receivers = new LinkedList<>();
+        receiverRepo.findAll().forEach(receiverEntity -> {
+            String receiverIp = receiverEntity.getLastIpAddress();
+            if (Objects.equals(receiverIp, remoteClientIp)) {
+                receivers.add(new Receiver(receiverEntity));
+            }
+        });
+        return receivers;
+    }
+
+    public Receiver update(String id, Receiver receiver) {
+        try {
+            UUID uuid = UUID.fromString(id);
+            if (!receiverRepo.existsById(uuid)) {
+                throw new ReceiverNotFound(id);
+            }
+            if (receiver.getId() == null) {
+                final Optional<ReceiverEntity> oldReceiver = receiverRepo.findById(uuid);
+                oldReceiver.ifPresent(receiverEntity -> receiver.setId(receiverEntity.getId()));
+            } else if (!Objects.equals(receiver.getId(), uuid)) {
+                throw new ReceiverIdInvalidValue(id);
+            }
+        } catch (IllegalArgumentException e) {
+            throw new ReceiverIdInvalidFormat(e.getMessage());
+        }
+
+        return new Receiver(receiverRepo.save(receiver.toEntity()));
+    }
+}
