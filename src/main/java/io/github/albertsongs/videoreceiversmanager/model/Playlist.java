@@ -3,9 +3,11 @@ package io.github.albertsongs.videoreceiversmanager.model;
 import io.github.albertsongs.videoreceiversmanager.entity.PlaylistEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public final class Playlist {
     private Long id;
     private String name;

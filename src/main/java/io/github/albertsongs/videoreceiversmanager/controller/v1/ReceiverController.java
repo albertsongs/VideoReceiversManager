@@ -1,6 +1,7 @@
 package io.github.albertsongs.videoreceiversmanager.controller.v1;
 
 import io.github.albertsongs.videoreceiversmanager.exception.ObjectNotFound;
+import io.github.albertsongs.videoreceiversmanager.model.ObjectList;
 import io.github.albertsongs.videoreceiversmanager.model.Receiver;
 import io.github.albertsongs.videoreceiversmanager.service.ReceiverService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +22,10 @@ public final class ReceiverController {
     }
 
     @GetMapping
-    public Iterable<Receiver> getAllowedReceivers(HttpServletRequest request) {
-        return receiverService.getAllWithLastIp(request.getRemoteAddr());
+    public ObjectList<Receiver> getAllowedReceivers(HttpServletRequest request) {
+        ObjectList<Receiver> receivers = new ObjectList<>();
+        receivers.setList(receiverService.getAllWithLastIp(request.getRemoteAddr()));
+        return receivers;
     }
 
     @GetMapping("/{receiverId}")
@@ -36,7 +39,6 @@ public final class ReceiverController {
                                   @RequestBody Receiver receiver) {
         return receiverService.update(receiverId, receiver);
     }
-
 
     @DeleteMapping("/{receiverId}")
     public void deleteReceiver(@PathVariable(value = "receiverId") String receiverId) {
