@@ -12,8 +12,8 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
-    @ExceptionHandler(ReceiverNotFound.class)
-    public ResponseEntity<Object> handleReceiverNotFound(ReceiverNotFound ex) {
+    @ExceptionHandler(ObjectNotFound.class)
+    public ResponseEntity<Object> handleObjectNotFound(ObjectNotFound ex) {
         return new ResponseEntity<>(
                 new ApiError(NOT_FOUND.getReasonPhrase(), ex.getMessage(), LocalDateTime.now()),
                 NOT_FOUND);

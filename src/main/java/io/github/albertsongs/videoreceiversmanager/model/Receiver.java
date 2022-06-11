@@ -16,7 +16,6 @@ public final class Receiver {
         id = entity.getId();
         name = entity.getName();
     }
-
     public ReceiverEntity toEntity(){
         ReceiverEntity receiverEntity = new ReceiverEntity();
         receiverEntity.setId(id);

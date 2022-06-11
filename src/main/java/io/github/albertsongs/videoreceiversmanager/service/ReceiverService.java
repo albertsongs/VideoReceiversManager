@@ -3,7 +3,7 @@ package io.github.albertsongs.videoreceiversmanager.service;
 import io.github.albertsongs.videoreceiversmanager.entity.ReceiverEntity;
 import io.github.albertsongs.videoreceiversmanager.exception.ReceiverIdInvalidFormat;
 import io.github.albertsongs.videoreceiversmanager.exception.ReceiverIdInvalidValue;
-import io.github.albertsongs.videoreceiversmanager.exception.ReceiverNotFound;
+import io.github.albertsongs.videoreceiversmanager.exception.ObjectNotFound;
 import io.github.albertsongs.videoreceiversmanager.model.Receiver;
 import io.github.albertsongs.videoreceiversmanager.repository.ReceiverRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +41,7 @@ public final class ReceiverService {
         } catch (IllegalArgumentException e) {
             throw new ReceiverIdInvalidFormat(e.getMessage());
         } catch (Exception e) {
-            throw new ReceiverNotFound(id);
+            throw new ObjectNotFound(Receiver.class.getSimpleName(), id);
         }
     }
 
@@ -60,7 +60,7 @@ public final class ReceiverService {
         try {
             UUID uuid = UUID.fromString(id);
             if (!receiverRepo.existsById(uuid)) {
-                throw new ReceiverNotFound(id);
+                throw new ObjectNotFound(Receiver.class.getSimpleName(), id);
             }
             if (receiver.getId() == null) {
                 final Optional<ReceiverEntity> oldReceiver = receiverRepo.findById(uuid);

@@ -1,6 +1,6 @@
 package io.github.albertsongs.videoreceiversmanager.controller.v1;
 
-import io.github.albertsongs.videoreceiversmanager.exception.ReceiverNotFound;
+import io.github.albertsongs.videoreceiversmanager.exception.ObjectNotFound;
 import io.github.albertsongs.videoreceiversmanager.model.Receiver;
 import io.github.albertsongs.videoreceiversmanager.service.ReceiverService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ public final class ReceiverController {
     @GetMapping("/{receiverId}")
     public Receiver getReceiverById(@PathVariable(value = "receiverId") String receiverId) {
         return receiverService.getById(receiverId)
-                .orElseThrow(() -> new ReceiverNotFound(receiverId));
+                .orElseThrow(() -> new ObjectNotFound(Receiver.class.getSimpleName(), receiverId));
     }
 
     @PatchMapping("/{receiverId}")
