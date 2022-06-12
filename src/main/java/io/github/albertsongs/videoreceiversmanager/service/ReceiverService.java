@@ -22,13 +22,12 @@ public final class ReceiverService {
         return new Receiver(receiverRepo.save(receiverEntity));
     }
 
-    public Optional<Receiver> getById(String id) {
+    public Receiver getById(String id) {
         try {
             UUID uuid = UUID.fromString(id);
-            Optional<ReceiverEntity> receiverEntity = receiverRepo.findById(uuid);
-            return receiverEntity.isEmpty()
-                    ? Optional.empty()
-                    : Optional.of(new Receiver(receiverEntity.get()));
+            ReceiverEntity receiverEntity = receiverRepo.findById(uuid)
+                    .orElseThrow(() -> new ObjectNotFound(Receiver.class.getSimpleName(), id));
+            return new Receiver(receiverEntity);
         } catch (IllegalArgumentException e) {
             throw new ReceiverIdInvalidFormat(e.getMessage());
         }

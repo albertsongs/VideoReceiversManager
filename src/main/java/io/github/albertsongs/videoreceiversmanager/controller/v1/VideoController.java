@@ -1,6 +1,6 @@
 package io.github.albertsongs.videoreceiversmanager.controller.v1;
 
-import io.github.albertsongs.videoreceiversmanager.model.ObjectList;
+import io.github.albertsongs.videoreceiversmanager.model.ObjectListContainer;
 import io.github.albertsongs.videoreceiversmanager.model.Video;
 import io.github.albertsongs.videoreceiversmanager.service.VideoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +15,8 @@ public final class VideoController {
     @Autowired
     private VideoService videoService;
     @GetMapping
-    public ObjectList<Video> getAllVideos(@RequestParam(name="playlistId", required = false) Long playlistId) {
-        final ObjectList<Video> videos = new ObjectList<>();
+    public ObjectListContainer<Video> getAllVideos(@RequestParam(name="playlistId", required = false) Long playlistId) {
+        final ObjectListContainer<Video> videos = new ObjectListContainer<>();
         videos.setList(playlistId == null
                 ? videoService.getAll()
                 : videoService.getAllFromPlaylistById(playlistId));

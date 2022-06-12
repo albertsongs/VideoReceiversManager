@@ -1,7 +1,6 @@
 package io.github.albertsongs.videoreceiversmanager.controller.v1;
 
-import io.github.albertsongs.videoreceiversmanager.exception.ObjectNotFound;
-import io.github.albertsongs.videoreceiversmanager.model.ObjectList;
+import io.github.albertsongs.videoreceiversmanager.model.ObjectListContainer;
 import io.github.albertsongs.videoreceiversmanager.model.Playlist;
 import io.github.albertsongs.videoreceiversmanager.service.PlaylistService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,14 +15,13 @@ public final class PlaylistController {
     @Autowired
     private PlaylistService playlistService;
     @GetMapping
-    public ObjectList<Playlist> getAllPlaylists() {
-        ObjectList<Playlist> list = new ObjectList<>();
+    public ObjectListContainer<Playlist> getAllPlaylists() {
+        ObjectListContainer<Playlist> list = new ObjectListContainer<>();
         list.setList(playlistService.getAll());
         return list;
     }
     @GetMapping("/{playlistId}")
     public Playlist getPlaylistById(@PathVariable(value = "playlistId") Long playlistId){
-        return playlistService.getById(playlistId)
-                .orElseThrow(()->new ObjectNotFound(Playlist.class.getSimpleName(), playlistId.toString()));
+        return playlistService.getById(playlistId);
     }
 }
