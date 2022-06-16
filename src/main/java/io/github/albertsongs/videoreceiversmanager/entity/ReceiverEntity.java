@@ -4,6 +4,7 @@ import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.UUID;
 
 @Entity (name = "receiver")
@@ -15,4 +16,5 @@ public final class ReceiverEntity {
     private UUID id = UUID.randomUUID();
     private String name;
     private String lastIpAddress;
+    private Date updatedAt;
 }

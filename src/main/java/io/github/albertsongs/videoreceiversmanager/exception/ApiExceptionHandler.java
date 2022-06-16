@@ -32,5 +32,11 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                 new ApiError(BAD_REQUEST.getReasonPhrase(), ex.getMessage(), LocalDateTime.now()),
                 BAD_REQUEST);
     }
+
+    public ResponseEntity<Object> handleRequiredFieldIsEmpty(RequiredFieldIsEmpty ex) {
+        return new ResponseEntity<>(
+                new ApiError(BAD_REQUEST.getReasonPhrase(), ex.getMessage(), LocalDateTime.now()),
+                BAD_REQUEST);
+    }
 }
 

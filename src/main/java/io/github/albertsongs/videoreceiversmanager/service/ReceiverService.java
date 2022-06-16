@@ -1,9 +1,9 @@
 package io.github.albertsongs.videoreceiversmanager.service;
 
 import io.github.albertsongs.videoreceiversmanager.entity.ReceiverEntity;
+import io.github.albertsongs.videoreceiversmanager.exception.ObjectNotFound;
 import io.github.albertsongs.videoreceiversmanager.exception.ReceiverIdInvalidFormat;
 import io.github.albertsongs.videoreceiversmanager.exception.ReceiverIdInvalidValue;
-import io.github.albertsongs.videoreceiversmanager.exception.ObjectNotFound;
 import io.github.albertsongs.videoreceiversmanager.model.Receiver;
 import io.github.albertsongs.videoreceiversmanager.repository.ReceiverRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,29 +16,21 @@ public final class ReceiverService {
     @Autowired
     private ReceiverRepo receiverRepo;
 
-    public Receiver add(Receiver receiver, String receiverIpAddress) {
-        final ReceiverEntity receiverEntity = receiver.toEntity();
-        receiverEntity.setLastIpAddress(receiverIpAddress);
-        return new Receiver(receiverRepo.save(receiverEntity));
+    public Receiver add(Receiver receiver) {
+        return new Receiver(receiverRepo.save(receiver.toEntity()));
     }
 
     public Receiver getById(String id) {
-        try {
-            UUID uuid = UUID.fromString(id);
-            ReceiverEntity receiverEntity = receiverRepo.findById(uuid)
-                    .orElseThrow(() -> new ObjectNotFound(Receiver.class.getSimpleName(), id));
-            return new Receiver(receiverEntity);
-        } catch (IllegalArgumentException e) {
-            throw new ReceiverIdInvalidFormat(e.getMessage());
-        }
+        UUID uuid = prepareReceiverId(id);
+        ReceiverEntity receiverEntity = receiverRepo.findById(uuid)
+                .orElseThrow(() -> new ObjectNotFound(Receiver.class.getSimpleName(), id));
+        return new Receiver(receiverEntity);
     }
 
-    public void delete(String id) {
+    public void deleteById(String id) {
         try {
-            UUID uuid = UUID.fromString(id);
+            UUID uuid = prepareReceiverId(id);
             receiverRepo.deleteById(uuid);
-        } catch (IllegalArgumentException e) {
-            throw new ReceiverIdInvalidFormat(e.getMessage());
         } catch (Exception e) {
             throw new ObjectNotFound(Receiver.class.getSimpleName(), id);
         }
@@ -56,21 +48,25 @@ public final class ReceiverService {
     }
 
     public Receiver update(String id, Receiver receiver) {
-        try {
-            UUID uuid = UUID.fromString(id);
-            if (!receiverRepo.existsById(uuid)) {
-                throw new ObjectNotFound(Receiver.class.getSimpleName(), id);
-            }
-            if (receiver.getId() == null) {
-                final Optional<ReceiverEntity> oldReceiver = receiverRepo.findById(uuid);
-                oldReceiver.ifPresent(receiverEntity -> receiver.setId(receiverEntity.getId()));
-            } else if (!Objects.equals(receiver.getId(), uuid)) {
-                throw new ReceiverIdInvalidValue(id);
-            }
-        } catch (IllegalArgumentException e) {
-            throw new ReceiverIdInvalidFormat(e.getMessage());
+        UUID uuid = prepareReceiverId(id);
+        if (!receiverRepo.existsById(uuid)) {
+            throw new ObjectNotFound(Receiver.class.getSimpleName(), id);
+        }
+        if (receiver.getId() == null) {
+            final Optional<ReceiverEntity> oldReceiver = receiverRepo.findById(uuid);
+            oldReceiver.ifPresent(receiverEntity -> receiver.setId(receiverEntity.getId()));
+        } else if (!Objects.equals(receiver.getId(), uuid)) {
+            throw new ReceiverIdInvalidValue(id);
         }
 
         return new Receiver(receiverRepo.save(receiver.toEntity()));
+    }
+
+    public UUID prepareReceiverId(String id) {
+        try {
+            return UUID.fromString(id);
+        } catch (IllegalArgumentException e) {
+            throw new ReceiverIdInvalidFormat(e.getMessage());
+        }
     }
 }

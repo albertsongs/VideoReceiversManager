@@ -14,8 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 public final class VideoController {
     @Autowired
     private VideoService videoService;
+
     @GetMapping
-    public ObjectListContainer<Video> getAllVideos(@RequestParam(name="playlistId", required = false) Long playlistId) {
+    public ObjectListContainer<Video> getAllVideos(@RequestParam(name = "playlistId", required = false) Long playlistId) {
         final ObjectListContainer<Video> videos = new ObjectListContainer<>();
         videos.setList(playlistId == null
                 ? videoService.getAll()
