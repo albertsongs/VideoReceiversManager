@@ -1,0 +1,10 @@
+spring:
+        datasource:
+            url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost/albertsongs}
+            username: ${SPRING_DATASOURCE_USERNAME:postgres}
+            password: ${SPRING_DATASOURCE_PASSWORD}
+        jpa:
+            generate-ddl: true
+            show-sql: true
+server:
+        address:${SERVER_ADDRESS:localhost}
