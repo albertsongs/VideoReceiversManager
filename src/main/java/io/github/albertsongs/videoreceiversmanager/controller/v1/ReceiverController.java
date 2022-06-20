@@ -28,6 +28,7 @@ public final class ReceiverController {
     @PostMapping
     public Receiver createReceiver(HttpServletRequest request, @RequestBody Receiver receiver) {
         receiver.setLastIpAddress(request.getRemoteAddr());
+        receiver.setUpdatedAt(new Date());
         return receiverService.add(receiver);
     }
 
