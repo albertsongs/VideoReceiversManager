@@ -17,6 +17,7 @@ import java.util.stream.StreamSupport;
 @Slf4j
 @RestController
 @RequestMapping(value = "api/v1/receivers")
+@CrossOrigin("https://albertsongs.github.io")
 public final class ReceiverController {
     @Autowired
     private ReceiverService receiverService;
