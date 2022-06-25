@@ -12,9 +12,13 @@ services:
     container_name: java-app
     restart: always
     ports:
-      - '8080:8080'
+      - '4433:443'
     environment:
-      SERVER_PORT: 8080
+      SERVER_PORT: 443
+      SERVER_SSL_ENABLED: true
+      SERVER_SSL_KEY_STORE_TYPE: PKCS12
+      SERVER_SSL_KEY_STORE: certificate.p12
+      SERVER_SSL_KEY_STORE_PASSWORD:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db/albertsongs
       SPRING_DATASOURCE_USERNAME: postgres
     depends_on:
