@@ -1,0 +1,8 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://db/albertsongs
+    username: postgres
+    password:
+  jpa:
+    generate-ddl: true
+    show-sql: true

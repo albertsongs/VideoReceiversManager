@@ -1,0 +1,11 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost/albertsongs
+    username: postgres
+    password:
+  jpa:
+    generate-ddl: true
+    show-sql: true
+server:
+  address: ${SERVER_ADDRESS:}
+  port: ${SERVER_PORT:8080}
