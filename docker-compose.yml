@@ -17,4 +17,5 @@ services:
       SERVER_PORT: 8080
       SPRING_DATASOURCE_URL: jdbc:postgresql://db/albertsongs
       SPRING_DATASOURCE_USERNAME: postgres
-      depends_on: db
+    depends_on:
+      - db
