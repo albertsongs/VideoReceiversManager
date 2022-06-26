@@ -63,7 +63,9 @@ To deploy the project in docker container, follow these steps:
     }
 ### Get receiver list
     GET: /api/v1/receivers
-    
+
+Returns the list of receivers from the client's local network sorted by novelty
+
     Response: 
     200 OK
     {
