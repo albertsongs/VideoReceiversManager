@@ -1,6 +1,14 @@
 # Video receivers manager
 API for [remote control](https://albertsongs.github.io/rc) of [the video player](https://albertsongs.github.io/tv) on the [albertsongs.github.io](https://albertsongs.github.io)
 
+### Technology stack
+* Spring Boot
+* STOMP over WebSockets
+* Hibernate
+* PostgreSQL
+* Maven
+* Docker Compose
+
 # Getting Started
 
 ### Steps
