@@ -6,3 +6,7 @@ spring:
   jpa:
     generate-ddl: true
     show-sql: true
+  graphql:
+    cors:
+      allowed-origins:
+        - https://albertsongs.github.io
