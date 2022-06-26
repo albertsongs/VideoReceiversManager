@@ -2,14 +2,17 @@ version: '3.1'
 services:
   db:
     image: postgres:alpine
+    container_name: albertsongs-db
     restart: always
     environment:
       - POSTGRES_DB=albertsongs
       - POSTGRES_USER=postgres
       - POSTGRES_HOST_AUTH_METHOD=trust
+    volumes:
+      - ./db_migration:/tmp/db_migration
   app:
     build: ./
-    container_name: java-app
+    container_name: albertsongs-app
     restart: always
     ports:
       - '4433:443'
