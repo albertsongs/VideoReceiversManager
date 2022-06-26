@@ -1,0 +1,10 @@
+INSERT INTO public.video (id, title, playlist_id, youtube_id) VALUES (0, 'Одноклассники мои', 0, 'i1HyV58O_DU');
+INSERT INTO public.video (id, title, playlist_id, youtube_id) VALUES (1, 'Золотая моя рыбка', 0, 'DuQ2g-OvYTs');
+INSERT INTO public.video (id, title, playlist_id, youtube_id) VALUES (2, 'Тает снег', 0, 'EG6X9Htgi0w');
+INSERT INTO public.video (id, title, playlist_id, youtube_id) VALUES (3, 'Одноразовая любовь', 0, 'st_0IDCw5EI');
+INSERT INTO public.video (id, title, playlist_id, youtube_id) VALUES (4, 'Снежинки', 0, 'tvCuehCLwuo');
+INSERT INTO public.video (id, title, playlist_id, youtube_id) VALUES (5, 'Как птица без крыльев', 0, 'PZHgLivJE-A');
+INSERT INTO public.video (id, title, playlist_id, youtube_id) VALUES (6, 'Где тебя найти', 0, 'h4bnyFI4J6g');
+INSERT INTO public.video (id, title, playlist_id, youtube_id) VALUES (7, 'Девушка без адреса', 0, '0MQR3tSu24Q');
+INSERT INTO public.video (id, title, playlist_id, youtube_id) VALUES (8, 'Вернуться к ней', 0, '0xT0-r7qy_M');
+INSERT INTO public.video (id, title, playlist_id, youtube_id) VALUES (9, 'Любовь нас делает красивей', 0, 'BAojrgVeQyo');
