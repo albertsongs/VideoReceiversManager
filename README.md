@@ -30,15 +30,11 @@ To deploy the project in docker container, follow these steps:
         "list": [
             {
                 "id": 0,
-                "title": "Одноклассники мои",
-                "youtubeId": "i1HyV58O_DU",
-                "youtubePlaylistId": "PLjv4Gt_enoJvL5QUt1H3bv9F3Omuj9n3g"
+                "title": "Одноклассники мои"
             },
             {
                 "id": 1,
-                "title": "Золотая моя рыбка",
-                "youtubeId": "DuQ2g-OvYTs",
-                "youtubePlaylistId": "PLjv4Gt_enoJvL5QUt1H3bv9F3Omuj9n3g"
+                "title": "Золотая моя рыбка"
             }
         ]
     }
@@ -138,6 +134,21 @@ Returns the list of receivers from the client's local network sorted by novelty
 
     Response:
     200 OK
+
+    Errors:
+    404 Not found
+### Play video on receiver by ID
+    POST: /api/v1/receivers/<receiver_id>/playVideo
+
+Sends a command to play video to the receiver
+
+    Body:
+    {
+        "id": <video_id>
+    }
+   
+    Response:
+    202 Accepted
 
     Errors:
     404 Not found

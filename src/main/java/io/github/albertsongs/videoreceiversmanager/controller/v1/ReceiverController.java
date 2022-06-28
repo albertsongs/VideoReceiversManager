@@ -8,6 +8,8 @@ import io.github.albertsongs.videoreceiversmanager.service.ReceiverService;
 import io.github.albertsongs.videoreceiversmanager.service.VideoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -62,28 +64,25 @@ public final class ReceiverController {
         receiverService.deleteById(receiverId);
     }
 
-    @PostMapping("/{receiverId}/playYoutubeVideo")
-    public void playYTVideoOnReceiverById(@PathVariable(value = "receiverId") String receiverId,
+    @PostMapping("/{receiverId}/playVideo")
+    public ResponseEntity<HttpStatus> playVideoOnReceiverById(@PathVariable(value = "receiverId") String receiverId,
                                           @RequestBody Video video) {
         receiverService.getById(receiverId);
         Long videoId = video.getId();
         if (videoId == null) {
             throw new RequiredFieldIsEmpty("id");
         }
-        Video fullVideo = videoService.getById(videoId);
-        YoutubeVideoInfo ytVideoInfo = new YoutubeVideoInfo(
-                fullVideo.getYoutubeId(), fullVideo.getYoutubePlaylistId()
-        );
-        sendVideoInfoToReceiver(receiverId, ytVideoInfo);
+        sendVideoInfoToReceiver(receiverId, videoService.getVideoExById(videoId));
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
-    private void sendVideoInfoToReceiver(String receiverId, YoutubeVideoInfo ytVideoInfo) {
+    private void sendVideoInfoToReceiver(String receiverId, Video videoInfo) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             Message message = new Message(
                     "server",
                     receiverId,
-                    objectMapper.writeValueAsString(ytVideoInfo),
+                    objectMapper.writeValueAsString(videoInfo),
                     Long.toString(new Date().getTime()),
                     Status.MESSAGE);
             messageController.recMessage(message);
