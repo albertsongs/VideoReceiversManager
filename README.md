@@ -24,6 +24,10 @@ To deploy the project in docker container, follow these steps:
 ### Get video info list
     GET: /api/v1/videos
 
+Allowed query params:
+* playlistId - for filter by playlist identifier
+
+
     Response: 
     200 OK
     {
