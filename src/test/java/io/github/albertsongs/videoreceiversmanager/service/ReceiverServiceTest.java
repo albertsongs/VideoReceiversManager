@@ -1,5 +1,6 @@
 package io.github.albertsongs.videoreceiversmanager.service;
 
+import io.github.albertsongs.videoreceiversmanager.TestConfig;
 import io.github.albertsongs.videoreceiversmanager.entity.ReceiverEntity;
 import io.github.albertsongs.videoreceiversmanager.exception.ObjectNotFound;
 import io.github.albertsongs.videoreceiversmanager.exception.ReceiverIdInvalidFormat;
@@ -95,7 +96,7 @@ class ReceiverServiceTest {
 
     @Test
     void getAllWithLastIp() {
-        List<ReceiverEntity> receiverEntityList = buildTestReceiverEntityList(100);
+        List<ReceiverEntity> receiverEntityList = buildTestReceiverEntityList();
         Mockito.doReturn(receiverEntityList)
                 .when(receiverRepo)
                 .findAll();
@@ -204,9 +205,9 @@ class ReceiverServiceTest {
         return receiverEntity;
     }
 
-    List<ReceiverEntity> buildTestReceiverEntityList(long count) {
+    List<ReceiverEntity> buildTestReceiverEntityList() {
         List<ReceiverEntity> entityList = new LinkedList<>();
-        for (int i = 0; i < count; i++) {
+        for (int i = 0; i < TestConfig.TEST_ENTITY_COUNT; i++) {
             entityList.add(buildTestReceiverEntity());
         }
 

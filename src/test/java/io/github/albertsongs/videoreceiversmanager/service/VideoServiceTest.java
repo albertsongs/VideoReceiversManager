@@ -1,5 +1,6 @@
 package io.github.albertsongs.videoreceiversmanager.service;
 
+import io.github.albertsongs.videoreceiversmanager.TestConfig;
 import io.github.albertsongs.videoreceiversmanager.entity.PlaylistEntity;
 import io.github.albertsongs.videoreceiversmanager.entity.VideoEntity;
 import io.github.albertsongs.videoreceiversmanager.exception.ObjectNotFound;
@@ -33,8 +34,8 @@ class VideoServiceTest {
         final long playlist1Id = 0;
         final long playlist2Id = 1;
         final long playlist3Id = 2;
-        List<VideoEntity> videoEntityList1 = buildTestVideoEntityList(100, playlist1Id);
-        List<VideoEntity> videoEntityList2 = buildTestVideoEntityList(100, playlist2Id);
+        List<VideoEntity> videoEntityList1 = buildTestVideoEntityList(TestConfig.TEST_ENTITY_COUNT/2, playlist1Id);
+        List<VideoEntity> videoEntityList2 = buildTestVideoEntityList(TestConfig.TEST_ENTITY_COUNT/2, playlist2Id);
         List<VideoEntity> fullVideoEntityList = new LinkedList<>();
         fullVideoEntityList.addAll(videoEntityList1);
         fullVideoEntityList.addAll(videoEntityList2);
@@ -58,8 +59,8 @@ class VideoServiceTest {
 
     @Test
     void getAll() {
-        List<VideoEntity> videoEntityList = buildTestVideoEntityList(100, 0);
-        videoEntityList.addAll(buildTestVideoEntityList(100, 1));
+        List<VideoEntity> videoEntityList = buildTestVideoEntityList(TestConfig.TEST_ENTITY_COUNT/2, 0);
+        videoEntityList.addAll(buildTestVideoEntityList(TestConfig.TEST_ENTITY_COUNT/2, 1));
         Mockito.doReturn(videoEntityList)
                 .when(videoRepo)
                 .findAll();
