@@ -7,6 +7,7 @@ import io.github.albertsongs.videoreceiversmanager.exception.ReceiverIdInvalidVa
 import io.github.albertsongs.videoreceiversmanager.model.Receiver;
 import io.github.albertsongs.videoreceiversmanager.repository.ReceiverRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -31,7 +32,7 @@ public final class ReceiverService {
         try {
             UUID uuid = prepareReceiverId(id);
             receiverRepo.deleteById(uuid);
-        } catch (Exception e) {
+        } catch (EmptyResultDataAccessException e) {
             throw new ObjectNotFound(Receiver.class.getSimpleName(), id);
         }
     }
@@ -53,8 +54,7 @@ public final class ReceiverService {
             throw new ObjectNotFound(Receiver.class.getSimpleName(), id);
         }
         if (receiver.getId() == null) {
-            final Optional<ReceiverEntity> oldReceiver = receiverRepo.findById(uuid);
-            oldReceiver.ifPresent(receiverEntity -> receiver.setId(receiverEntity.getId()));
+            receiver.setId(uuid);
         } else if (!Objects.equals(receiver.getId(), uuid)) {
             throw new ReceiverIdInvalidValue(id);
         }
