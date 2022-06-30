@@ -112,12 +112,13 @@ class ReceiverServiceTest {
     }
 
     @Test
-    void update() {
+    void updateSuccess() {
         ReceiverEntity expectedEntity = buildTestReceiverEntity();
         String updatedReceiverId = expectedEntity.getId().toString();
         Receiver updatedReceiver = new Receiver(new ReceiverEntity());
-        updatedReceiver.setName("updated receiver name");
-        expectedEntity.setName("updated receiver name");
+        String updatedReceiverName = "updated receiver name";
+        updatedReceiver.setName(updatedReceiverName);
+        expectedEntity.setName(updatedReceiverName);
         Receiver expectedReceiver = new Receiver(expectedEntity);
         Mockito.doReturn(true)
                 .when(receiverRepo)
@@ -157,12 +158,27 @@ class ReceiverServiceTest {
         assertNotEquals(thirdSavedReceiver.getLastIpAddress(), updatedLastIpAddress);
         assertNotEquals(thirdSavedReceiver.getUpdatedAt(), updatedAt);
         assertEquals(expectedReceiver, thirdSavedReceiver);
+    }
+
+    @Test
+    void updateWrong() {
+        ReceiverEntity expectedEntity = buildTestReceiverEntity();
+        String updatedReceiverId = expectedEntity.getId().toString();
+        Receiver updatedReceiver = new Receiver(new ReceiverEntity());
+        updatedReceiver.setName(expectedEntity.getName());
+        Receiver expectedReceiver = new Receiver(expectedEntity);
+        Mockito.doReturn(true)
+                .when(receiverRepo)
+                .existsById(expectedEntity.getId());
+        Mockito.doReturn(expectedEntity)
+                .when(receiverRepo)
+                .save(updatedReceiver.toEntity());
         //Update wrong receiver (ID in query param != ID in object)
         UUID nonExistingReceiverId = UUID.randomUUID();
         updatedReceiver.setId(nonExistingReceiverId);
         assertThrows(ReceiverIdInvalidValue.class,
                 () -> receiverService.update(updatedReceiverId, updatedReceiver));
-        Mockito.verify(receiverRepo, Mockito.times(4)).existsById(expectedEntity.getId());
+        Mockito.verify(receiverRepo, Mockito.times(1)).existsById(expectedEntity.getId());
         Mockito.verify(receiverRepo, Mockito.times(0)).save(updatedReceiver.toEntity());
         //Update non-existing receiver
         Mockito.doReturn(false)
@@ -175,7 +191,6 @@ class ReceiverServiceTest {
         //Check error ReceiverIdInvalidFormat
         assertThrows(ReceiverIdInvalidFormat.class, () -> receiverService.update(NOT_A_UUID, expectedReceiver));
         Mockito.verify(receiverRepo, Mockito.times(0)).save(updatedReceiver.toEntity());
-
     }
 
     ReceiverEntity buildTestReceiverEntity() {
