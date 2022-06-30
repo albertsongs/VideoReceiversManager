@@ -16,6 +16,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.stream.StreamSupport;
 
+import static io.github.albertsongs.videoreceiversmanager.model.ReceiverCommandType.PLAY_YOUTUBE_VIDEO;
+
 @Slf4j
 @RestController
 @RequestMapping(value = "api/v1/receivers")
@@ -72,17 +74,19 @@ public final class ReceiverController {
         if (videoId == null) {
             throw new RequiredFieldIsEmpty("id");
         }
-        sendVideoInfoToReceiver(receiverId, videoService.getVideoExById(videoId));
+        VideoEx videoExtendedInfo = videoService.getVideoExById(videoId);
+        ReceiverCommand receiverCommand = new ReceiverCommand(PLAY_YOUTUBE_VIDEO, videoExtendedInfo);
+        sendCommandToReceiver(receiverId, receiverCommand);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
-    private void sendVideoInfoToReceiver(String receiverId, Video videoInfo) {
+    private void sendCommandToReceiver(String receiverId, ReceiverCommand command) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             Message message = new Message(
-                    "server",
+                    "videoReceiverManager",
                     receiverId,
-                    objectMapper.writeValueAsString(videoInfo),
+                    objectMapper.writeValueAsString(command),
                     Long.toString(new Date().getTime()),
                     Status.MESSAGE);
             messageController.recMessage(message);

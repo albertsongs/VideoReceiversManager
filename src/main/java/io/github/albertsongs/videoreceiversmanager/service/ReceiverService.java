@@ -36,7 +36,7 @@ public final class ReceiverService {
             throw new ObjectNotFound(Receiver.class.getSimpleName(), id);
         }
     }
-
+    //TODO: replace to getAll(filter, sorter)
     public Iterable<Receiver> getAllWithLastIp(String remoteClientIp) {
         List<Receiver> receivers = new LinkedList<>();
         receiverRepo.findAll().forEach(receiverEntity -> {
