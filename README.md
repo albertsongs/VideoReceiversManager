@@ -21,7 +21,7 @@ To deploy the project in docker container, follow these steps:
 3. Run init.sh
 
 ## API Requests
-### Get video info list
+### Get list of video info
     GET: /api/v1/videos
 
 Allowed query params:
@@ -42,7 +42,7 @@ Allowed query params:
             }
         ]
     }
-### Get video playlists
+### Get list of video playlists
     GET: /api/v1/playlists
     
     Response: 
@@ -61,7 +61,7 @@ Allowed query params:
             }
         ]
     }
-### Get receiver list
+### Get list of receivers
     GET: /api/v1/receivers
 
 Returns the list of receivers from the client's local network sorted by novelty
@@ -82,7 +82,7 @@ Returns the list of receivers from the client's local network sorted by novelty
             }
         ]
     }
-### Create receivers
+### Create new receiver
     POST: /api/v1/receivers
 
     Body:
@@ -114,7 +114,7 @@ Returns the list of receivers from the client's local network sorted by novelty
 
     Errors:
     404 Not found
-### Edit receivers by ID
+### Edit receiver by ID
     PATCH: /api/v1/receivers/<receiver_id>
 
     Body:
