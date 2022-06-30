@@ -16,6 +16,7 @@ public final class VideoService {
     @Autowired
     private VideoRepo videoRepo;
 
+    //TODO: replace to getAll(filter, sorter)
     public Iterable<Video> getAllFromPlaylistById(Long playlistId) {
         List<Video> videos = new LinkedList<>();
         videoRepo.findAll().forEach(videoEntity -> {
