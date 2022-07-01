@@ -15,4 +15,6 @@ public class VideoEntity {
     @ManyToOne()
     @JoinColumn(name = "playlist_id")
     private PlaylistEntity playlist;
+    private String url;
+    private String subtitlesUrl;
 }
