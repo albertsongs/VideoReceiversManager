@@ -7,5 +7,7 @@ public enum ReceiverCommandType {
     STOP,
     PAUSE,
     NEXT,
-    PREVIOUS
+    PREVIOUS,
+    VOLUME_UP,
+    VOLUME_DOWN
 }

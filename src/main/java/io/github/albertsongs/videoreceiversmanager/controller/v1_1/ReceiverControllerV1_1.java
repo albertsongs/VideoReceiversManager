@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static io.github.albertsongs.videoreceiversmanager.model.ReceiverCommandType.PLAY_VIDEO;
+import static io.github.albertsongs.videoreceiversmanager.model.ReceiverCommandType.*;
 
 @Slf4j
 @RestController
@@ -29,6 +29,54 @@ public class ReceiverControllerV1_1 extends ReceiverController {
                 ? new ReceiverCommand(PLAY_VIDEO, videoService.getVideoExById(videoId))
                 : new ReceiverCommand(PLAY_VIDEO, video);
         sendCommandToReceiver(receiverId, receiverCommand);
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+    }
+
+    @PostMapping("/{receiverId}/play")
+    public ResponseEntity<HttpStatus> sendCommandPlayToReceiverById(
+            @PathVariable(value = "receiverId") String receiverId) {
+        receiverService.getById(receiverId);
+        sendCommandToReceiver(receiverId, new ReceiverCommand(PLAY, null));
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+    }
+
+    @PostMapping("/{receiverId}/pause")
+    public ResponseEntity<HttpStatus> sendCommandPauseToReceiverById(
+            @PathVariable(value = "receiverId") String receiverId) {
+        receiverService.getById(receiverId);
+        sendCommandToReceiver(receiverId, new ReceiverCommand(PAUSE, null));
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+    }
+
+    @PostMapping("/{receiverId}/next")
+    public ResponseEntity<HttpStatus> sendCommandNextToReceiverById(
+            @PathVariable(value = "receiverId") String receiverId) {
+        receiverService.getById(receiverId);
+        sendCommandToReceiver(receiverId, new ReceiverCommand(NEXT, null));
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+    }
+
+    @PostMapping("/{receiverId}/previous")
+    public ResponseEntity<HttpStatus> sendCommandPreviousToReceiverById(
+            @PathVariable(value = "receiverId") String receiverId) {
+        receiverService.getById(receiverId);
+        sendCommandToReceiver(receiverId, new ReceiverCommand(PREVIOUS, null));
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+    }
+
+    @PostMapping("/{receiverId}/volume/up")
+    public ResponseEntity<HttpStatus> sendCommandVolumeUpToReceiverById(
+            @PathVariable(value = "receiverId") String receiverId) {
+        receiverService.getById(receiverId);
+        sendCommandToReceiver(receiverId, new ReceiverCommand(VOLUME_UP, null));
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+    }
+
+    @PostMapping("/{receiverId}/volume/down")
+    public ResponseEntity<HttpStatus> sendCommandVolumeDownToReceiverById(
+            @PathVariable(value = "receiverId") String receiverId) {
+        receiverService.getById(receiverId);
+        sendCommandToReceiver(receiverId, new ReceiverCommand(VOLUME_UP, null));
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 }
