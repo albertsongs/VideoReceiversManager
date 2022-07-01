@@ -22,10 +22,10 @@ public class ReceiverControllerV1_1 extends ReceiverController {
         receiverService.getById(receiverId);
         Long videoId = video.getId();
         String videoUrl = video.getUrl();
-        if (videoId == null && videoUrl.isEmpty()) {
+        if (videoId == null && videoUrl == null) {
             throw new RequiredFieldIsEmpty("id");
         }
-        ReceiverCommand receiverCommand = videoUrl.isEmpty()
+        ReceiverCommand receiverCommand = videoUrl == null
                 ? new ReceiverCommand(PLAY_VIDEO, videoService.getVideoExById(videoId))
                 : new ReceiverCommand(PLAY_VIDEO, video);
         sendCommandToReceiver(receiverId, receiverCommand);
