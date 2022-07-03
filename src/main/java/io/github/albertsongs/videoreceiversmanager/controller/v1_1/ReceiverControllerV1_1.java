@@ -36,7 +36,7 @@ public class ReceiverControllerV1_1 extends ReceiverController {
     public ResponseEntity<HttpStatus> sendCommandPlayToReceiverById(
             @PathVariable(value = "receiverId") String receiverId) {
         receiverService.getById(receiverId);
-        sendCommandToReceiver(receiverId, new ReceiverCommand(PLAY, null));
+        sendCommandToReceiver(receiverId, new ReceiverCommand(PLAY_PAUSE, null));
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
@@ -68,7 +68,7 @@ public class ReceiverControllerV1_1 extends ReceiverController {
     public ResponseEntity<HttpStatus> sendCommandVolumeDownToReceiverById(
             @PathVariable(value = "receiverId") String receiverId) {
         receiverService.getById(receiverId);
-        sendCommandToReceiver(receiverId, new ReceiverCommand(VOLUME_UP, null));
+        sendCommandToReceiver(receiverId, new ReceiverCommand(VOLUME_DOWN, null));
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 }
