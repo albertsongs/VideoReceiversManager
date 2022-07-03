@@ -32,19 +32,11 @@ public class ReceiverControllerV1_1 extends ReceiverController {
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
-    @PostMapping("/{receiverId}/play")
+    @PostMapping("/{receiverId}/play-pause")
     public ResponseEntity<HttpStatus> sendCommandPlayToReceiverById(
             @PathVariable(value = "receiverId") String receiverId) {
         receiverService.getById(receiverId);
         sendCommandToReceiver(receiverId, new ReceiverCommand(PLAY, null));
-        return new ResponseEntity<>(HttpStatus.ACCEPTED);
-    }
-
-    @PostMapping("/{receiverId}/pause")
-    public ResponseEntity<HttpStatus> sendCommandPauseToReceiverById(
-            @PathVariable(value = "receiverId") String receiverId) {
-        receiverService.getById(receiverId);
-        sendCommandToReceiver(receiverId, new ReceiverCommand(PAUSE, null));
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
