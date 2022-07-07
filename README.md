@@ -1,5 +1,6 @@
 # Video receivers manager
-API for [remote control](https://albertsongs.github.io/rc) of [the video player](https://albertsongs.github.io/tv) on the [albertsongs.github.io](https://albertsongs.github.io)
+RESTful API for [remote control](https://albertsongs.github.io/rc)
+of [the video player](https://albertsongs.github.io/tv) on the [albertsongs.github.io](https://albertsongs.github.io)
 
 ### Technology stack
 * Spring Boot
@@ -21,12 +22,32 @@ To deploy the project in docker container, follow these steps:
 3. Run init.sh
 
 ## API Requests
+
+## Updates in APIv1.1
+
+###
+
+    POST: /api/v1.1/receivers/<receiver_id>/play-pause
+    POST: /api/v1.1/receivers/<receiver_id>/previous
+    POST: /api/v1.1/receivers/<receiver_id>/next
+    POST: /api/v1.1/receivers/<receiver_id>/volume/up
+    POST: /api/v1.1/receivers/<receiver_id>/volume/down
+
+New requests send commands to the receiver
+
+    Response:
+    202 Accepted
+
+    Errors:
+    404 Not found
+
 ### Get list of video info
+
     GET: /api/v1/videos
 
 Allowed query params:
-* playlistId - for filter by playlist identifier
 
+* playlistId - for filter by playlist identifier (not required)
 
     Response: 
     200 OK
@@ -34,11 +55,15 @@ Allowed query params:
         "list": [
             {
                 "id": 0,
-                "title": "Одноклассники мои"
+                "title": "Одноклассники мои",
+                "url": "https://albertsongs.github.io/content/videos/Одноклассники мои.webm",
+                "subtitlesUrl": "https://albertsongs.github.io/content/subtitles/Одноклассники мои.vtt"
             },
             {
                 "id": 1,
                 "title": "Золотая моя рыбка"
+                "url": "https://albertsongs.github.io/content/videos/Золотая моя рыбка.webm",
+                "subtitlesUrl": "https://albertsongs.github.io/content/subtitles/Золотая моя рыбка.vtt"
             }
         ]
     }
@@ -156,3 +181,9 @@ Sends a command to play video to the receiver
 
     Errors:
     404 Not found
+
+# Tests coverage
+
+| Class | Method | Line |
+|-------|:------:|-----:|
+| 93%   |  80%   | 86%  |
