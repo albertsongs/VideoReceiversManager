@@ -1,4 +1,4 @@
-package io.github.albertsongs.videoreceiversmanager.controller.v1;
+package io.github.albertsongs.videoreceiversmanager.controller;
 
 import io.github.albertsongs.videoreceiversmanager.model.Message;
 import org.springframework.beans.factory.annotation.Autowired;

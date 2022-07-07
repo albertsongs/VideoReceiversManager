@@ -1,6 +1,6 @@
 package io.github.albertsongs.videoreceiversmanager.controller.v1_1;
 
-import io.github.albertsongs.videoreceiversmanager.controller.v1.ReceiverController;
+import io.github.albertsongs.videoreceiversmanager.controller.v1.ReceiverControllerV1;
 import io.github.albertsongs.videoreceiversmanager.exception.RequiredFieldIsEmpty;
 import io.github.albertsongs.videoreceiversmanager.model.ReceiverCommand;
 import io.github.albertsongs.videoreceiversmanager.model.Video;
@@ -14,7 +14,7 @@ import static io.github.albertsongs.videoreceiversmanager.model.ReceiverCommandT
 @Slf4j
 @RestController
 @RequestMapping(value = "api/v1.1/receivers")
-public class ReceiverControllerV1_1 extends ReceiverController {
+public class ReceiverControllerV1_1 extends ReceiverControllerV1 {
     @PostMapping("/{receiverId}/playVideo")
     @Override
     public ResponseEntity<HttpStatus> playVideoOnReceiverById(@PathVariable(value = "receiverId") String receiverId,
@@ -33,7 +33,7 @@ public class ReceiverControllerV1_1 extends ReceiverController {
     }
 
     @PostMapping("/{receiverId}/play-pause")
-    public ResponseEntity<HttpStatus> sendCommandPlayToReceiverById(
+    public ResponseEntity<HttpStatus> sendCommandPlayPauseToReceiverById(
             @PathVariable(value = "receiverId") String receiverId) {
         receiverService.getById(receiverId);
         sendCommandToReceiver(receiverId, new ReceiverCommand(PLAY_PAUSE, null));

@@ -9,17 +9,17 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("api/v1/playlists")
 @CrossOrigin("https://albertsongs.github.io")
-public final class PlaylistController {
+public final class PlaylistControllerV1 {
     @Autowired
     private PlaylistService playlistService;
+
     @GetMapping
     public ObjectListContainer<Playlist> getAllPlaylists() {
-        ObjectListContainer<Playlist> list = new ObjectListContainer<>();
-        list.setList(playlistService.getAll());
-        return list;
+        return new ObjectListContainer<>(playlistService.getAll());
     }
+
     @GetMapping("/{playlistId}")
-    public Playlist getPlaylistById(@PathVariable(value = "playlistId") Long playlistId){
+    public Playlist getPlaylistById(@PathVariable(value = "playlistId") Long playlistId) {
         return playlistService.getById(playlistId);
     }
 }

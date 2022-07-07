@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @Entity(name = "video")
 @Data
-public class VideoEntity {
+public final class VideoEntity {
     @Id
     @GeneratedValue
     private Long id;

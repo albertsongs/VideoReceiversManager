@@ -15,27 +15,27 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(ObjectNotFound.class)
     public ResponseEntity<Object> handleObjectNotFound(ObjectNotFound ex) {
         return new ResponseEntity<>(
-                new ApiError(NOT_FOUND.getReasonPhrase(), ex.getMessage(), LocalDateTime.now()),
+                new ApiError(NOT_FOUND.getReasonPhrase(), ex.getMessage(), LocalDateTime.now().toString()),
                 NOT_FOUND);
     }
 
     @ExceptionHandler(ReceiverIdInvalidFormat.class)
     public ResponseEntity<Object> handleReceiverNotFound(ReceiverIdInvalidFormat ex) {
         return new ResponseEntity<>(
-                new ApiError(BAD_REQUEST.getReasonPhrase(), ex.getMessage(), LocalDateTime.now()),
+                new ApiError(BAD_REQUEST.getReasonPhrase(), ex.getMessage(), LocalDateTime.now().toString()),
                 BAD_REQUEST);
     }
 
     @ExceptionHandler(ReceiverIdInvalidValue.class)
     public ResponseEntity<Object> handleReceiverNotFound(ReceiverIdInvalidValue ex) {
         return new ResponseEntity<>(
-                new ApiError(BAD_REQUEST.getReasonPhrase(), ex.getMessage(), LocalDateTime.now()),
+                new ApiError(BAD_REQUEST.getReasonPhrase(), ex.getMessage(), LocalDateTime.now().toString()),
                 BAD_REQUEST);
     }
 
     public ResponseEntity<Object> handleRequiredFieldIsEmpty(RequiredFieldIsEmpty ex) {
         return new ResponseEntity<>(
-                new ApiError(BAD_REQUEST.getReasonPhrase(), ex.getMessage(), LocalDateTime.now()),
+                new ApiError(BAD_REQUEST.getReasonPhrase(), ex.getMessage(), LocalDateTime.now().toString()),
                 BAD_REQUEST);
     }
 }

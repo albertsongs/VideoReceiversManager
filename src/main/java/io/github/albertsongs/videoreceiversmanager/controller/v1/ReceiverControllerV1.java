@@ -2,6 +2,7 @@ package io.github.albertsongs.videoreceiversmanager.controller.v1;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.github.albertsongs.videoreceiversmanager.controller.MessageController;
 import io.github.albertsongs.videoreceiversmanager.exception.RequiredFieldIsEmpty;
 import io.github.albertsongs.videoreceiversmanager.model.*;
 import io.github.albertsongs.videoreceiversmanager.service.ReceiverService;
@@ -22,7 +23,7 @@ import static io.github.albertsongs.videoreceiversmanager.model.ReceiverCommandT
 @RestController
 @RequestMapping(value = "api/v1/receivers")
 @CrossOrigin("https://albertsongs.github.io")
-public class ReceiverController {
+public class ReceiverControllerV1 {
     @Autowired
     protected ReceiverService receiverService;
     @Autowired
@@ -39,12 +40,10 @@ public class ReceiverController {
 
     @GetMapping
     public ObjectListContainer<Receiver> getAllowedReceivers(HttpServletRequest request) {
-        ObjectListContainer<Receiver> receiversContainer = new ObjectListContainer<>();
         Iterable<Receiver> receivers = receiverService.getAllWithLastIp(request.getRemoteAddr());
-        receiversContainer.setList(StreamSupport.stream(receivers.spliterator(), false)
+        return new ObjectListContainer<>(StreamSupport.stream(receivers.spliterator(), false)
                 .sorted((r1, r2) -> r2.getUpdatedAt().compareTo(r1.getUpdatedAt()))
                 .toList());
-        return receiversContainer;
     }
 
     @GetMapping("/{receiverId}")
@@ -62,6 +61,7 @@ public class ReceiverController {
     }
 
     @DeleteMapping("/{receiverId}")
+    //TODO: return HttpStatus.NO_CONTENT in APIv2
     public void deleteReceiverById(@PathVariable(value = "receiverId") String receiverId) {
         receiverService.deleteById(receiverId);
     }
