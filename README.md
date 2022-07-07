@@ -187,3 +187,5 @@ Sends a command to play video to the receiver
 | Class | Method | Line |
 |-------|:------:|-----:|
 | 93%   |  80%   | 86%  |
+
+![Tests coverage](https://raw.githubusercontent.com/albertsongs/VideoReceiversManager/dev/tests_coverage.png)
