@@ -46,10 +46,6 @@ New requests send commands to the receiver
 
 ### Get list of video info
 
-Allowed query params:
-
-* playlistId - for filter by playlist identifier (not required)
-
     GET: /api/v1/videos
 
     Response:
@@ -71,7 +67,12 @@ Allowed query params:
         ]
     }
 
+Allowed query params:
+
+* playlistId - for filter by playlist identifier (not required)
+
 ### Get list of video playlists
+
     GET: /api/v1/playlists
     
     Response: 
