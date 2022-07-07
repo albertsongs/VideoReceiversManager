@@ -9,6 +9,7 @@ of [the video player](https://albertsongs.github.io/tv) on the [albertsongs.gith
 * PostgreSQL
 * Maven
 * Docker Compose
+* JUnit & Mockito
 
 # Getting Started
 
@@ -40,19 +41,18 @@ New requests send commands to the receiver
 
     Errors:
     404 Not found
-    
+
 ## APIv1
 
 ### Get list of video info
-
-    GET: /api/v1/videos
 
 Allowed query params:
 
 * playlistId - for filter by playlist identifier (not required)
 
+    GET: /api/v1/videos
 
-    Response: 
+    Response:
     200 OK
     {
         "list": [
@@ -70,6 +70,7 @@ Allowed query params:
             }
         ]
     }
+
 ### Get list of video playlists
     GET: /api/v1/playlists
     
