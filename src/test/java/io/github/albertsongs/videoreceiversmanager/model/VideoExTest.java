@@ -1,8 +1,7 @@
-package io.github.albertsongs.videoreceiversmanager;
+package io.github.albertsongs.videoreceiversmanager.model;
 
 import io.github.albertsongs.videoreceiversmanager.entity.PlaylistEntity;
 import io.github.albertsongs.videoreceiversmanager.entity.VideoEntity;
-import io.github.albertsongs.videoreceiversmanager.model.VideoEx;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
