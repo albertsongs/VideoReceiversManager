@@ -23,7 +23,7 @@ To deploy the project in docker container, follow these steps:
 
 ## API Requests
 
-## Updates in APIv1.1
+## New in APIv1.1
 
 ###
 
@@ -40,6 +40,8 @@ New requests send commands to the receiver
 
     Errors:
     404 Not found
+    
+## APIv1
 
 ### Get list of video info
 
@@ -48,6 +50,8 @@ New requests send commands to the receiver
 Allowed query params:
 
 * playlistId - for filter by playlist identifier (not required)
+
+
 
     Response: 
     200 OK
