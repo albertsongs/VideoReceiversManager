@@ -1,7 +1,6 @@
-package io.github.albertsongs.videoreceiversmanager;
+package io.github.albertsongs.videoreceiversmanager.model;
 
 import io.github.albertsongs.videoreceiversmanager.entity.ReceiverEntity;
-import io.github.albertsongs.videoreceiversmanager.model.Receiver;
 import org.junit.jupiter.api.Test;
 
 import java.util.Date;

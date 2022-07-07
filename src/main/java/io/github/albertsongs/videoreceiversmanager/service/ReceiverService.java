@@ -1,72 +1,21 @@
 package io.github.albertsongs.videoreceiversmanager.service;
 
-import io.github.albertsongs.videoreceiversmanager.entity.ReceiverEntity;
-import io.github.albertsongs.videoreceiversmanager.exception.ObjectNotFound;
-import io.github.albertsongs.videoreceiversmanager.exception.ReceiverIdInvalidFormat;
-import io.github.albertsongs.videoreceiversmanager.exception.ReceiverIdInvalidValue;
 import io.github.albertsongs.videoreceiversmanager.model.Receiver;
-import io.github.albertsongs.videoreceiversmanager.repository.ReceiverRepo;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.UUID;
 
 @Service
-public final class ReceiverService {
-    @Autowired
-    private ReceiverRepo receiverRepo;
+public interface ReceiverService {
+    Receiver add(Receiver receiver);
 
-    public Receiver add(Receiver receiver) {
-        return new Receiver(receiverRepo.save(receiver.toEntity()));
-    }
+    Receiver getById(String id);
 
-    public Receiver getById(String id) {
-        UUID uuid = prepareReceiverId(id);
-        ReceiverEntity receiverEntity = receiverRepo.findById(uuid)
-                .orElseThrow(() -> new ObjectNotFound(Receiver.class.getSimpleName(), id));
-        return new Receiver(receiverEntity);
-    }
+    void deleteById(String id);
 
-    public void deleteById(String id) {
-        try {
-            UUID uuid = prepareReceiverId(id);
-            receiverRepo.deleteById(uuid);
-        } catch (EmptyResultDataAccessException e) {
-            throw new ObjectNotFound(Receiver.class.getSimpleName(), id);
-        }
-    }
-    //TODO: replace to getAll(filter, sorter)
-    public Iterable<Receiver> getAllWithLastIp(String remoteClientIp) {
-        List<Receiver> receivers = new LinkedList<>();
-        receiverRepo.findAll().forEach(receiverEntity -> {
-            String receiverIp = receiverEntity.getLastIpAddress();
-            if (Objects.equals(receiverIp, remoteClientIp)) {
-                receivers.add(new Receiver(receiverEntity));
-            }
-        });
-        return receivers;
-    }
+    Iterable<Receiver> getAllWithLastIp(String remoteClientIp);
 
-    public Receiver update(String id, Receiver receiver) {
-        UUID uuid = prepareReceiverId(id);
-        if (!receiverRepo.existsById(uuid)) {
-            throw new ObjectNotFound(Receiver.class.getSimpleName(), id);
-        }
-        if (receiver.getId() == null) {
-            receiver.setId(uuid);
-        } else if (!Objects.equals(receiver.getId(), uuid)) {
-            throw new ReceiverIdInvalidValue(id);
-        }
+    Receiver update(String id, Receiver receiver);
 
-        return new Receiver(receiverRepo.save(receiver.toEntity()));
-    }
-
-    public UUID prepareReceiverId(String id) {
-        try {
-            return UUID.fromString(id);
-        } catch (IllegalArgumentException e) {
-            throw new ReceiverIdInvalidFormat(e.getMessage());
-        }
-    }
+    UUID prepareReceiverId(String id);
 }

@@ -1,8 +1,7 @@
-package io.github.albertsongs.videoreceiversmanager;
+package io.github.albertsongs.videoreceiversmanager.model;
 
 import io.github.albertsongs.videoreceiversmanager.entity.PlaylistEntity;
 import io.github.albertsongs.videoreceiversmanager.entity.VideoEntity;
-import io.github.albertsongs.videoreceiversmanager.model.VideoEx;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -19,11 +18,15 @@ public class VideoExTest {
         videoEntity.setTitle("Test video");
         videoEntity.setYoutubeId("FH378fs389FU");
         videoEntity.setPlaylist(playlistEntity);
+        videoEntity.setUrl("https://localhost:8080/videos/1.webm");
+        videoEntity.setSubtitlesUrl("https://localhost:8080/subtitles/1.vtt");
         VideoEx video = new VideoEx(videoEntity);
 
         assertEquals(videoEntity.getId(),video.getId());
         assertEquals(videoEntity.getTitle(), video.getTitle());
         assertEquals(videoEntity.getYoutubeId(), video.getYoutube().getVideoId());
         assertEquals(videoEntity.getPlaylist().getYoutubeId(), video.getYoutube().getPlaylistId());
+        assertEquals(videoEntity.getUrl(), video.getUrl());
+        assertEquals(videoEntity.getSubtitlesUrl(), video.getSubtitlesUrl());
     }
 }

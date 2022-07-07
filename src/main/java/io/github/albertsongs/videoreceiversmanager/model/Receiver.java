@@ -1,5 +1,6 @@
 package io.github.albertsongs.videoreceiversmanager.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.github.albertsongs.videoreceiversmanager.entity.ReceiverEntity;
 import lombok.AllArgsConstructor;
@@ -15,6 +16,7 @@ public final class Receiver {
     private String name;
     @JsonIgnore
     private String lastIpAddress;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ")
     private Date updatedAt;
 
     public Receiver(ReceiverEntity entity) {

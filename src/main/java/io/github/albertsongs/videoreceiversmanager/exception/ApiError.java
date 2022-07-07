@@ -1,14 +1,21 @@
 package io.github.albertsongs.videoreceiversmanager.exception;
 
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
-import java.time.LocalDateTime;
-
 @Data
-@AllArgsConstructor
 public class ApiError {
     private String status;
     private String message;
-    private LocalDateTime timestamp;
+    private String timestamp;
+
+    @JsonCreator
+    public ApiError(@JsonProperty("status") String status,
+                    @JsonProperty("message") String message,
+                    @JsonProperty("timestamp") String timestamp) {
+        this.status = status;
+        this.message = message;
+        this.timestamp = timestamp;
+    }
 }

@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @Entity(name = "video")
 @Data
-public class VideoEntity {
+public final class VideoEntity {
     @Id
     @GeneratedValue
     private Long id;
@@ -15,4 +15,6 @@ public class VideoEntity {
     @ManyToOne()
     @JoinColumn(name = "playlist_id")
     private PlaylistEntity playlist;
+    private String url;
+    private String subtitlesUrl;
 }
