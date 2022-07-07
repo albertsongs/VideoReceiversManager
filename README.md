@@ -52,7 +52,6 @@ Allowed query params:
 * playlistId - for filter by playlist identifier (not required)
 
 
-
     Response: 
     200 OK
     {
