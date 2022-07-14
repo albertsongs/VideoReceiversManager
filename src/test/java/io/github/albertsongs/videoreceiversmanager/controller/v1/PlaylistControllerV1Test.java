@@ -22,10 +22,15 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
+public
 class PlaylistControllerV1Test extends AbstractControllerTest {
     @MockBean
     PlaylistService playlistService;
     final String BASE_URL = "/api/v1/playlists";
+
+    protected String getBaseUrl() {
+        return BASE_URL;
+    }
 
     protected List<Playlist> buildPlaylists() {
         return new LinkedList<>() {{
@@ -49,7 +54,7 @@ class PlaylistControllerV1Test extends AbstractControllerTest {
                 .getAll();
         ObjectListContainer<Playlist> expectedVideosContainer = new ObjectListContainer<>(playlists);
 
-        MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.get(BASE_URL)
+        MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.get(getBaseUrl())
                 .accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
         final int status = mvcResult.getResponse().getStatus();
         final String responseJson = mvcResult.getResponse().getContentAsString();
@@ -66,7 +71,7 @@ class PlaylistControllerV1Test extends AbstractControllerTest {
                 .when(playlistService)
                 .getById(playlistId);
 
-        String uri = BASE_URL + "/" + playlistId;
+        String uri = getBaseUrl() + "/" + playlistId;
         MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.get(uri)
                 .accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
         final int status = mvcResult.getResponse().getStatus();
@@ -84,7 +89,7 @@ class PlaylistControllerV1Test extends AbstractControllerTest {
                 .when(playlistService)
                 .getById(playlistId);
 
-        String uri = BASE_URL + "/" + playlistId;
+        String uri = getBaseUrl() + "/" + playlistId;
         MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.get(uri)
                 .accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
         final int status = mvcResult.getResponse().getStatus();

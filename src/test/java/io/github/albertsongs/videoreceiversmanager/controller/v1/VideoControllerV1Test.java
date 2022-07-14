@@ -20,10 +20,15 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
+public
 class VideoControllerV1Test extends AbstractControllerTest {
     @MockBean
     VideoService videoService;
     final String BASE_URL = "/api/v1/videos";
+
+    protected String getBaseUrl() {
+        return BASE_URL;
+    }
 
     protected List<Video> buildVideos() {
         return new LinkedList<>() {{
@@ -49,7 +54,7 @@ class VideoControllerV1Test extends AbstractControllerTest {
                 .getAll();
         ObjectListContainer<Video> expectedVideosContainer = new ObjectListContainer<>(videos);
 
-        MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.get(BASE_URL)
+        MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.get(getBaseUrl())
                 .accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
         final int status = mvcResult.getResponse().getStatus();
         final String responseJson = mvcResult.getResponse().getContentAsString();
@@ -67,7 +72,7 @@ class VideoControllerV1Test extends AbstractControllerTest {
                 .getAllFromPlaylistById(playlistId);
         ObjectListContainer<Video> expectedVideosContainer = new ObjectListContainer<>(videos);
 
-        String uri = BASE_URL + "?playlistId=" + playlistId;
+        String uri = getBaseUrl() + "?playlistId=" + playlistId;
         MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.get(uri)
                 .accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
         final int status = mvcResult.getResponse().getStatus();
