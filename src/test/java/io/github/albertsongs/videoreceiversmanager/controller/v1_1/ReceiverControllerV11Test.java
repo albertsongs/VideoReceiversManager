@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
+public
 class ReceiverControllerV11Test extends ReceiverControllerV1Test {
     final String BASE_URL = "/api/v1.1/receivers";
 
@@ -64,6 +65,5 @@ class ReceiverControllerV11Test extends ReceiverControllerV1Test {
     @Test
     void sendCommandVolumeDownToReceiverByIdNotFoundReceiver() throws Exception {
         sendCommandTestNotFoundReceiver("/volume/down");
-
     }
 }

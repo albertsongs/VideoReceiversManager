@@ -79,10 +79,9 @@ class ReceiverControllerV1Test extends AbstractControllerTest {
     @Test
     void getAllowedReceivers() throws Exception {
         final List<Receiver> receivers = buildReceivers();
-        final String clientIpAddress = "127.0.0.1";
         Mockito.doReturn(receivers)
                 .when(receiverService)
-                .getAllWithLastIp(clientIpAddress);
+                .getAll(Mockito.any(), Mockito.any());
         receivers.sort((r1, r2) -> r2.getUpdatedAt().compareTo(r1.getUpdatedAt()));
         ObjectListContainer<Receiver> expectedVideosContainer = new ObjectListContainer<>(receivers);
 
@@ -92,16 +91,15 @@ class ReceiverControllerV1Test extends AbstractControllerTest {
         final String responseJson = mvcResult.getResponse().getContentAsString();
         assertEquals(HttpStatus.OK.value(), status);
         assertEquals(mapToJson(expectedVideosContainer), responseJson);
-        Mockito.verify(receiverService, Mockito.times(1)).getAllWithLastIp(clientIpAddress);
+        Mockito.verify(receiverService, Mockito.times(1)).getAll(Mockito.any(), Mockito.any());
     }
 
     @Test
     void getAllowedReceiversEmpty() throws Exception {
         final List<Receiver> receivers = new LinkedList<>();
-        final String clientIpAddress = "127.0.0.1";
         Mockito.doReturn(receivers)
                 .when(receiverService)
-                .getAllWithLastIp(clientIpAddress);
+                .getAll(Mockito.any(), Mockito.any());
         ObjectListContainer<Receiver> expectedVideosContainer = new ObjectListContainer<>(new LinkedList<>());
 
         MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.get(BASE_URL)
@@ -110,7 +108,7 @@ class ReceiverControllerV1Test extends AbstractControllerTest {
         final String responseJson = mvcResult.getResponse().getContentAsString();
         assertEquals(HttpStatus.OK.value(), status);
         assertEquals(mapToJson(expectedVideosContainer), responseJson);
-        Mockito.verify(receiverService, Mockito.times(1)).getAllWithLastIp(clientIpAddress);
+        Mockito.verify(receiverService, Mockito.times(1)).getAll(Mockito.any(), Mockito.any());
     }
 
     @Test
@@ -135,7 +133,7 @@ class ReceiverControllerV1Test extends AbstractControllerTest {
     void getReceiverByBadId() throws Exception {
         final String receiverId = "not uuid";
         try {
-            UUID.fromString(receiverId);
+            final UUID uuid = UUID.fromString(receiverId);
         } catch (IllegalArgumentException e) {
             ReceiverIdInvalidFormat receiverIdInvalidFormat = new ReceiverIdInvalidFormat(e.getMessage());
             Mockito.doThrow(receiverIdInvalidFormat)
@@ -225,7 +223,7 @@ class ReceiverControllerV1Test extends AbstractControllerTest {
 
     @Test
     void playVideoOnReceiverByIdNotFoundVideo() throws Exception {
-        sendCommandTestNotFoundVideo("/playVideo");
+        sendCommandTestNotFoundVideo();
     }
 
     @Test
@@ -261,9 +259,9 @@ class ReceiverControllerV1Test extends AbstractControllerTest {
     }
 
     /**
-     * @param command example "/playVideo"
+     *
      */
-    protected void sendCommandTestNotFoundVideo(String command) throws Exception {
+    protected void sendCommandTestNotFoundVideo() throws Exception {
         final UUID receiverId = UUID.randomUUID();
         final Long videoId = 1L;
         final Receiver expectedReceiver = buildReceiver(receiverId);
@@ -275,7 +273,7 @@ class ReceiverControllerV1Test extends AbstractControllerTest {
                 .when(videoService)
                 .getVideoExById(videoId);
 
-        String uri = getBaseUrl() + "/" + receiverId + command;
+        String uri = getBaseUrl() + "/" + receiverId + "/playVideo";
         MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.post(uri)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content("{\"id\":" + videoId + "}")

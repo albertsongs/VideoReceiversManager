@@ -1,7 +1,8 @@
 package io.github.albertsongs.videoreceiversmanager.controller;
 
 import io.github.albertsongs.videoreceiversmanager.model.Message;
-import org.springframework.beans.factory.annotation.Autowired;
+import io.github.albertsongs.videoreceiversmanager.service.ReceiverService;
+import lombok.AllArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -11,13 +12,19 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 
 @Controller
 @CrossOrigin("https://albertsongs.github.io")
+@AllArgsConstructor
 public class MessageController {
-    @Autowired
     private SimpMessagingTemplate simpMessagingTemplate;
+    private ReceiverService receiverService;
 
     @MessageMapping("/message")
     @SendTo("/chatroom/public")
     public Message receiveMessage(@Payload Message message) {
+        String senderName = message.getSenderName();
+        String messageContent = message.getMessage();
+        if (senderName != null && messageContent != null && (messageContent.equals("RESPOND"))) {
+            receiverService.handleRespondReceiver(senderName);
+        }
         return message;
     }
 

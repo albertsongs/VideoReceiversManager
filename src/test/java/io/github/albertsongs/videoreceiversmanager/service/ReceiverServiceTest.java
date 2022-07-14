@@ -15,6 +15,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.EmptyResultDataAccessException;
 
 import java.util.*;
+import java.util.function.Predicate;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -95,19 +96,24 @@ class ReceiverServiceTest {
     }
 
     @Test
-    void getAllWithLastIp() {
+    void getAll() {
         List<ReceiverEntity> receiverEntityList = buildTestReceiverEntityList();
+        final Comparator<ReceiverEntity> expectedSortComparator = (r1, r2) -> r2.getUpdatedAt().compareTo(r1.getUpdatedAt());
+        receiverEntityList.sort(expectedSortComparator);
         Mockito.doReturn(receiverEntityList)
                 .when(receiverRepo)
                 .findAll();
         List<Receiver> expectedReceivers = new LinkedList<>();
         receiverEntityList.forEach((receiverEntity -> expectedReceivers.add(new Receiver(receiverEntity))));
 
-        final Iterable<Receiver> receiversFromService = receiverService.getAllWithLastIp(TEST_RECEIVER_IP);
+        final Predicate<Receiver> isLocalReceiver = receiver -> receiver.getLastIpAddress().equals(TEST_RECEIVER_IP);
+        final Comparator<Receiver> sortComparator = (r1, r2) -> r2.getUpdatedAt().compareTo(r1.getUpdatedAt());
+        final Iterable<Receiver> receiversFromService = receiverService.getAll(isLocalReceiver, sortComparator);
         Mockito.verify(receiverRepo, Mockito.times(1)).findAll();
         assertIterableEquals(expectedReceivers, receiversFromService);
 
-        final Iterable<Receiver> secondReceiversFromService = receiverService.getAllWithLastIp("1.1.1.1");
+        final Predicate<Receiver> isNotLocalReceiver = receiver -> receiver.getLastIpAddress().equals("1.1.1.1");
+        final Iterable<Receiver> secondReceiversFromService = receiverService.getAll(isNotLocalReceiver, sortComparator);
         Mockito.verify(receiverRepo, Mockito.times(2)).findAll();
         assertIterableEquals(new LinkedList<Receiver>(), secondReceiversFromService);
     }
