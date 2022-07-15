@@ -23,7 +23,6 @@ import static io.github.albertsongs.videoreceiversmanager.model.ReceiverCommandT
 @Slf4j
 @RestController
 @RequestMapping(value = "api/v1/receivers")
-@CrossOrigin("https://albertsongs.github.io")
 @AllArgsConstructor
 public class ReceiverControllerV1 {
     protected final ReceiverService receiverService;
