@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.function.Predicate;
+import java.util.stream.StreamSupport;
 
 @Service
 @AllArgsConstructor
@@ -49,27 +50,18 @@ public final class ReceiverServiceImpl implements ReceiverService {
 
     @Override
     public Iterable<Receiver> getAll(Predicate<Receiver> filterPredicate, Comparator<Receiver> sortComparator) {
-        List<Receiver> receivers = new LinkedList<>();
-        receiverRepo.findAll().forEach(receiverEntity -> {
-            Receiver receiver = new Receiver(receiverEntity);
-            if (filterPredicate.test(receiver)) {
-                receivers.add(receiver);
-            }
-        });
-        receivers.sort(sortComparator);
-        return receivers;
+        return StreamSupport.stream(receiverRepo.findAll().spliterator(), false)
+                .map(Receiver::new)
+                .filter(filterPredicate)
+                .sorted(sortComparator)
+                .toList();
     }
 
     @Deprecated
     public Iterable<Receiver> getAllWithLastIp(String remoteClientIp) {
-        List<Receiver> receivers = new LinkedList<>();
-        receiverRepo.findAll().forEach(receiverEntity -> {
-            String receiverIp = receiverEntity.getLastIpAddress();
-            if (Objects.equals(receiverIp, remoteClientIp)) {
-                receivers.add(new Receiver(receiverEntity));
-            }
-        });
-        return receivers;
+        return StreamSupport.stream(receiverRepo.findAll().spliterator(), false)
+                .filter(entity -> Objects.equals(entity.getLastIpAddress(), remoteClientIp))
+                .map(Receiver::new).toList();
     }
 
     public Receiver update(String id, Receiver receiver) {
