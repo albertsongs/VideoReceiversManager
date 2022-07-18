@@ -24,6 +24,15 @@ To deploy the project in docker container, follow these steps:
 
 ## API Requests
 
+## New in APIv1.2
+
+* add request param "isOnline" to filter receivers in requests:
+
+###
+
+    GET: /api/v1/receivers?isOnline=true
+    GET: /api/v1/receivers/{receiverId}?isOnline=false
+
 ## New in APIv1.1
 
 ###
