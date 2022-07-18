@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.Objects;
 import java.util.function.Predicate;
 
 import static io.github.albertsongs.videoreceiversmanager.model.ReceiverCommandType.PLAY_YOUTUBE_VIDEO;
@@ -39,7 +40,8 @@ public class ReceiverControllerV1 {
     @GetMapping
     public ObjectListContainer<Receiver> getAllowedReceivers(
             HttpServletRequest request, @RequestParam(defaultValue = "false") boolean isOnline) {
-        final Predicate<Receiver> isLocalReceiver = receiver -> receiver.getLastIpAddress().equals(request.getRemoteAddr());
+        final Predicate<Receiver> isLocalReceiver = receiver -> Objects.equals(
+                receiver.getLastIpAddress(), request.getRemoteAddr());
         final Comparator<Receiver> sortComparator = (r1, r2) -> r2.getUpdatedAt().compareTo(r1.getUpdatedAt());
         Iterable<Receiver> receivers = receiverService.getAll(isLocalReceiver, sortComparator);
         return new ObjectListContainer<>(receivers);
