@@ -5,22 +5,27 @@ import io.github.albertsongs.videoreceiversmanager.exception.ObjectNotFound;
 import io.github.albertsongs.videoreceiversmanager.model.Video;
 import io.github.albertsongs.videoreceiversmanager.model.VideoEx;
 import io.github.albertsongs.videoreceiversmanager.repository.VideoRepo;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Predicate;
 
 @Service
+@AllArgsConstructor
 public class VideoServiceImpl implements VideoService {
-    @Autowired
-    private VideoRepo videoRepo;
+    private final VideoRepo videoRepo;
 
-    //TODO: replace to getAll(filter, sorter)
+    @Deprecated
     public Iterable<Video> getAllFromPlaylistById(Long playlistId) {
+        return getAll(videoEntity -> videoEntity.getPlaylist().getId().equals(playlistId));
+    }
+
+    protected Iterable<Video> getAll(Predicate<VideoEntity> filter) {
         List<Video> videos = new LinkedList<>();
         videoRepo.findAll().forEach(videoEntity -> {
-            if (videoEntity.getPlaylist().getId().equals(playlistId)) {
+            if (filter.test(videoEntity)) {
                 videos.add(new Video(videoEntity));
             }
         });

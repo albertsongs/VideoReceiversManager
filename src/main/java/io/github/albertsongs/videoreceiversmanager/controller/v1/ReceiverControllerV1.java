@@ -7,29 +7,28 @@ import io.github.albertsongs.videoreceiversmanager.exception.RequiredFieldIsEmpt
 import io.github.albertsongs.videoreceiversmanager.model.*;
 import io.github.albertsongs.videoreceiversmanager.service.ReceiverService;
 import io.github.albertsongs.videoreceiversmanager.service.VideoService;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Comparator;
 import java.util.Date;
-import java.util.stream.StreamSupport;
+import java.util.Objects;
+import java.util.function.Predicate;
 
 import static io.github.albertsongs.videoreceiversmanager.model.ReceiverCommandType.PLAY_YOUTUBE_VIDEO;
 
 @Slf4j
 @RestController
 @RequestMapping(value = "api/v1/receivers")
-@CrossOrigin("https://albertsongs.github.io")
+@AllArgsConstructor
 public class ReceiverControllerV1 {
-    @Autowired
-    protected ReceiverService receiverService;
-    @Autowired
-    protected VideoService videoService;
-    @Autowired
-    private MessageController messageController;
+    protected final ReceiverService receiverService;
+    protected final VideoService videoService;
+    private final MessageController messageController;
 
     @PostMapping
     public Receiver createReceiver(HttpServletRequest request, @RequestBody Receiver receiver) {
@@ -39,15 +38,18 @@ public class ReceiverControllerV1 {
     }
 
     @GetMapping
-    public ObjectListContainer<Receiver> getAllowedReceivers(HttpServletRequest request) {
-        Iterable<Receiver> receivers = receiverService.getAllWithLastIp(request.getRemoteAddr());
-        return new ObjectListContainer<>(StreamSupport.stream(receivers.spliterator(), false)
-                .sorted((r1, r2) -> r2.getUpdatedAt().compareTo(r1.getUpdatedAt()))
-                .toList());
+    public ObjectListContainer<Receiver> getAllowedReceivers(
+            HttpServletRequest request, @RequestParam(defaultValue = "false") boolean isOnline) {
+        final Predicate<Receiver> isLocalReceiver = receiver -> Objects.equals(
+                receiver.getLastIpAddress(), request.getRemoteAddr());
+        final Comparator<Receiver> sortComparator = (r1, r2) -> r2.getUpdatedAt().compareTo(r1.getUpdatedAt());
+        Iterable<Receiver> receivers = receiverService.getAll(isLocalReceiver, sortComparator);
+        return new ObjectListContainer<>(receivers);
     }
 
     @GetMapping("/{receiverId}")
-    public Receiver getReceiverById(@PathVariable(value = "receiverId") String receiverId) {
+    public Receiver getReceiverById(@PathVariable(value = "receiverId") String receiverId,
+                                    @RequestParam(defaultValue = "false") boolean isOnline) {
         return receiverService.getById(receiverId);
     }
 
@@ -69,7 +71,7 @@ public class ReceiverControllerV1 {
     @PostMapping("/{receiverId}/playVideo")
     public ResponseEntity<HttpStatus> playVideoOnReceiverById(@PathVariable(value = "receiverId") String receiverId,
                                                               @RequestBody Video video) {
-        receiverService.getById(receiverId);
+        checkReceiverBeforeSendCommand(receiverId);
         Long videoId = video.getId();
         if (videoId == null) {
             throw new RequiredFieldIsEmpty("id");
@@ -93,5 +95,9 @@ public class ReceiverControllerV1 {
         } catch (JsonProcessingException ex) {
             log.error(ex.getMessage());
         }
+    }
+
+    protected void checkReceiverBeforeSendCommand(String receiverId) {
+        receiverService.getById(receiverId);
     }
 }

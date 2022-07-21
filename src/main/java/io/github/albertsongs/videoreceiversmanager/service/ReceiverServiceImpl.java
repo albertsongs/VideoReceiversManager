@@ -6,19 +6,18 @@ import io.github.albertsongs.videoreceiversmanager.exception.ReceiverIdInvalidFo
 import io.github.albertsongs.videoreceiversmanager.exception.ReceiverIdInvalidValue;
 import io.github.albertsongs.videoreceiversmanager.model.Receiver;
 import io.github.albertsongs.videoreceiversmanager.repository.ReceiverRepo;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.StreamSupport;
 
 @Service
+@AllArgsConstructor
 public final class ReceiverServiceImpl implements ReceiverService {
-    @Autowired
-    private ReceiverRepo receiverRepo;
+    private final ReceiverRepo receiverRepo;
 
     public Receiver add(Receiver receiver) {
         return new Receiver(receiverRepo.save(receiver.toEntity()));
@@ -31,6 +30,15 @@ public final class ReceiverServiceImpl implements ReceiverService {
         return new Receiver(receiverEntity);
     }
 
+    @Override
+    public Receiver getOnlineReceiverById(String id) {
+        Receiver receiver = getById(id);
+        if (isReceiverOnline(receiver.getId())) {
+            return receiver;
+        }
+        throw new ObjectNotFound(Receiver.class.getSimpleName(), id);
+    }
+
     public void deleteById(String id) {
         try {
             UUID uuid = prepareReceiverId(id);
@@ -40,16 +48,20 @@ public final class ReceiverServiceImpl implements ReceiverService {
         }
     }
 
-    //TODO: replace to getAll(filter, sorter)
+    @Override
+    public Iterable<Receiver> getAll(Predicate<Receiver> filterPredicate, Comparator<Receiver> sortComparator) {
+        return StreamSupport.stream(receiverRepo.findAll().spliterator(), false)
+                .map(Receiver::new)
+                .filter(filterPredicate)
+                .sorted(sortComparator)
+                .toList();
+    }
+
+    @Deprecated
     public Iterable<Receiver> getAllWithLastIp(String remoteClientIp) {
-        List<Receiver> receivers = new LinkedList<>();
-        receiverRepo.findAll().forEach(receiverEntity -> {
-            String receiverIp = receiverEntity.getLastIpAddress();
-            if (Objects.equals(receiverIp, remoteClientIp)) {
-                receivers.add(new Receiver(receiverEntity));
-            }
-        });
-        return receivers;
+        return StreamSupport.stream(receiverRepo.findAll().spliterator(), false)
+                .filter(entity -> Objects.equals(entity.getLastIpAddress(), remoteClientIp))
+                .map(Receiver::new).toList();
     }
 
     public Receiver update(String id, Receiver receiver) {
@@ -72,5 +84,22 @@ public final class ReceiverServiceImpl implements ReceiverService {
         } catch (IllegalArgumentException e) {
             throw new ReceiverIdInvalidFormat(e.getMessage());
         }
+    }
+
+    private final Map<UUID, Long> receiverRespondsMap = new HashMap<>();
+
+    @Override
+    public void handleRespondReceiver(String receiverId) {
+        UUID receiverUuid = prepareReceiverId(receiverId);
+        receiverRespondsMap.put(receiverUuid, new Date().getTime());
+    }
+
+    public Boolean isReceiverOnline(UUID receiverId) {
+        Long receiverLastRespondTime = receiverRespondsMap.get(receiverId);
+        if (receiverLastRespondTime == null) {
+            return false;
+        }
+        final long RECEIVER_RESPOND_INTERVAL = 15000; // 15 sec
+        return new Date().getTime() - receiverLastRespondTime <= RECEIVER_RESPOND_INTERVAL + 5000;
     }
 }

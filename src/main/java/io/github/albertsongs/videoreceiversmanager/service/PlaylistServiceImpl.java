@@ -4,16 +4,16 @@ import io.github.albertsongs.videoreceiversmanager.entity.PlaylistEntity;
 import io.github.albertsongs.videoreceiversmanager.exception.ObjectNotFound;
 import io.github.albertsongs.videoreceiversmanager.model.Playlist;
 import io.github.albertsongs.videoreceiversmanager.repository.PlaylistRepo;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedList;
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public final class PlaylistServiceImpl implements PlaylistService {
-    @Autowired
-    private PlaylistRepo playlistRepo;
+    private final PlaylistRepo playlistRepo;
 
     public Iterable<Playlist> getAll() {
         List<Playlist> playlists = new LinkedList<>();
