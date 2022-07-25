@@ -11,6 +11,8 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Sort;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -29,32 +31,28 @@ class VideoServiceTest {
 
     private long testVideoEntityCounter = 1;
 
+    VideoEntity buildVideoEntityFromPlaylistWithId(Long playlistId) {
+        final VideoEntity exemplaryVideoEntity1 = new VideoEntity();
+        final PlaylistEntity videoPlaylist1 = new PlaylistEntity();
+        videoPlaylist1.setId(playlistId);
+        exemplaryVideoEntity1.setPlaylist(videoPlaylist1);
+        return exemplaryVideoEntity1;
+    }
+
     @Test
     void getAllFromPlaylistById() {
         final long playlist1Id = 0;
-        final long playlist2Id = 1;
-        final long playlist3Id = 2;
-        List<VideoEntity> videoEntityList1 = buildTestVideoEntityList(TestConfig.TEST_ENTITY_COUNT/2, playlist1Id);
-        List<VideoEntity> videoEntityList2 = buildTestVideoEntityList(TestConfig.TEST_ENTITY_COUNT/2, playlist2Id);
-        List<VideoEntity> fullVideoEntityList = new LinkedList<>();
-        fullVideoEntityList.addAll(videoEntityList1);
-        fullVideoEntityList.addAll(videoEntityList2);
-        Mockito.doReturn(fullVideoEntityList)
+        List<VideoEntity> videoEntityList1 = buildTestVideoEntityList(TestConfig.TEST_ENTITY_COUNT / 2, playlist1Id);
+
+        Mockito.doReturn(videoEntityList1)
                 .when(videoRepo)
-                .findAll();
-        List<Video> expectedVideos1 = new LinkedList<>();
-        List<Video> expectedVideos2 = new LinkedList<>();
-        videoEntityList1.forEach((videoEntity -> expectedVideos1.add(new Video(videoEntity))));
-        videoEntityList2.forEach((videoEntity -> expectedVideos2.add(new Video(videoEntity))));
+                .findAll(Mockito.any(Example.class), Mockito.any(Sort.class));
+
+        List<Video> expectedVideos1 = videoEntityList1.stream().map(Video::new).toList();
 
         assertEquals(expectedVideos1, videoService.getAllFromPlaylistById(playlist1Id));
-        Mockito.verify(videoRepo, Mockito.times(1)).findAll();
-
-        assertEquals(expectedVideos2, videoService.getAllFromPlaylistById(playlist2Id));
-        Mockito.verify(videoRepo, Mockito.times(2)).findAll();
-
-        assertEquals(new LinkedList<>(), videoService.getAllFromPlaylistById(playlist3Id));
-        Mockito.verify(videoRepo, Mockito.times(3)).findAll();
+        Mockito.verify(videoRepo, Mockito.times(1))
+                .findAll(Mockito.any(Example.class), Mockito.any(Sort.class));
     }
 
     @Test

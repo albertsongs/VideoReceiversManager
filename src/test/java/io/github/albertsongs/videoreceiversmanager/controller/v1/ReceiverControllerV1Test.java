@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
@@ -81,7 +82,7 @@ class ReceiverControllerV1Test extends AbstractControllerTest {
         final List<Receiver> receivers = buildReceivers();
         Mockito.doReturn(receivers)
                 .when(receiverService)
-                .getAll(Mockito.any(), Mockito.any());
+                .getAll(Mockito.any(Receiver.class), Mockito.any(Sort.Order.class));
         receivers.sort((r1, r2) -> r2.getUpdatedAt().compareTo(r1.getUpdatedAt()));
         ObjectListContainer<Receiver> expectedVideosContainer = new ObjectListContainer<>(receivers);
 
@@ -91,7 +92,8 @@ class ReceiverControllerV1Test extends AbstractControllerTest {
         final String responseJson = mvcResult.getResponse().getContentAsString();
         assertEquals(HttpStatus.OK.value(), status);
         assertEquals(mapToJson(expectedVideosContainer), responseJson);
-        Mockito.verify(receiverService, Mockito.times(1)).getAll(Mockito.any(), Mockito.any());
+        Mockito.verify(receiverService, Mockito.times(1))
+                .getAll(Mockito.any(Receiver.class), Mockito.any(Sort.Order.class));
     }
 
     @Test
@@ -99,7 +101,7 @@ class ReceiverControllerV1Test extends AbstractControllerTest {
         final List<Receiver> receivers = new LinkedList<>();
         Mockito.doReturn(receivers)
                 .when(receiverService)
-                .getAll(Mockito.any(), Mockito.any());
+                .getAll(Mockito.any(Receiver.class), Mockito.any(Sort.Order.class));
         ObjectListContainer<Receiver> expectedVideosContainer = new ObjectListContainer<>(new LinkedList<>());
 
         MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.get(BASE_URL)
@@ -108,7 +110,8 @@ class ReceiverControllerV1Test extends AbstractControllerTest {
         final String responseJson = mvcResult.getResponse().getContentAsString();
         assertEquals(HttpStatus.OK.value(), status);
         assertEquals(mapToJson(expectedVideosContainer), responseJson);
-        Mockito.verify(receiverService, Mockito.times(1)).getAll(Mockito.any(), Mockito.any());
+        Mockito.verify(receiverService, Mockito.times(1))
+                .getAll(Mockito.any(Receiver.class), Mockito.any(Sort.Order.class));
     }
 
     @Test
