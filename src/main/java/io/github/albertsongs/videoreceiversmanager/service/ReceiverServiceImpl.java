@@ -1,5 +1,6 @@
 package io.github.albertsongs.videoreceiversmanager.service;
 
+import com.sun.istack.NotNull;
 import io.github.albertsongs.videoreceiversmanager.entity.ReceiverEntity;
 import io.github.albertsongs.videoreceiversmanager.exception.ObjectNotFound;
 import io.github.albertsongs.videoreceiversmanager.exception.ReceiverIdInvalidFormat;
@@ -8,11 +9,12 @@ import io.github.albertsongs.videoreceiversmanager.model.Receiver;
 import io.github.albertsongs.videoreceiversmanager.repository.ReceiverRepo;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.function.Predicate;
-import java.util.stream.StreamSupport;
 
 @Service
 @AllArgsConstructor
@@ -50,16 +52,23 @@ public final class ReceiverServiceImpl implements ReceiverService {
 
     @Override
     public Iterable<Receiver> getAll(Predicate<Receiver> filterPredicate, Comparator<Receiver> sortComparator) {
-        return StreamSupport.stream(receiverRepo.findAll().spliterator(), false)
+        return receiverRepo.findAll().stream()
                 .map(Receiver::new)
                 .filter(filterPredicate)
                 .sorted(sortComparator)
                 .toList();
     }
 
+    public List<Receiver> getAll(@NotNull Receiver exemplaryReceiver, Sort.Order sortOrder) {
+        return receiverRepo.findAll(Example.of(exemplaryReceiver.toEntity()), Sort.by(sortOrder))
+                .stream()
+                .map(Receiver::new)
+                .toList();
+    }
+
     @Deprecated
     public Iterable<Receiver> getAllWithLastIp(String remoteClientIp) {
-        return StreamSupport.stream(receiverRepo.findAll().spliterator(), false)
+        return receiverRepo.findAll().stream()
                 .filter(entity -> Objects.equals(entity.getLastIpAddress(), remoteClientIp))
                 .map(Receiver::new).toList();
     }
@@ -101,5 +110,9 @@ public final class ReceiverServiceImpl implements ReceiverService {
         }
         final long RECEIVER_RESPOND_INTERVAL = 15000; // 15 sec
         return new Date().getTime() - receiverLastRespondTime <= RECEIVER_RESPOND_INTERVAL + 5000;
+    }
+
+    public Boolean isReceiverOnline(Receiver receiver) {
+        return isReceiverOnline(receiver.getId());
     }
 }
