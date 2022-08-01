@@ -19,10 +19,10 @@ public final class Playlist {
         youtubeId = entity.getYoutubeId();
     }
     public PlaylistEntity toEntity(){
-        PlaylistEntity playlistEntity = new PlaylistEntity();
-        playlistEntity.setId(id);
-        playlistEntity.setName(name);
-        playlistEntity.setYoutubeId(youtubeId);
-        return playlistEntity;
+        return PlaylistEntity.builder()
+                .id(id)
+                .name(name)
+                .youtubeId(youtubeId)
+                .build();
     }
 }

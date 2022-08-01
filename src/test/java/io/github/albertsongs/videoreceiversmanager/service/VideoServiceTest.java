@@ -31,14 +31,6 @@ class VideoServiceTest {
 
     private long testVideoEntityCounter = 1;
 
-    VideoEntity buildVideoEntityFromPlaylistWithId(Long playlistId) {
-        final VideoEntity exemplaryVideoEntity1 = new VideoEntity();
-        final PlaylistEntity videoPlaylist1 = new PlaylistEntity();
-        videoPlaylist1.setId(playlistId);
-        exemplaryVideoEntity1.setPlaylist(videoPlaylist1);
-        return exemplaryVideoEntity1;
-    }
-
     @Test
     void getAllFromPlaylistById() {
         final long playlist1Id = 0;
@@ -92,11 +84,11 @@ class VideoServiceTest {
     }
 
     PlaylistEntity buildTestPlaylistEntity(long id) {
-        PlaylistEntity playlistEntity = new PlaylistEntity();
-        playlistEntity.setId(id);
-        playlistEntity.setName("Test playlist");
-        playlistEntity.setYoutubeId("YoUTuBE0PlaYLisT2iD");
-        return playlistEntity;
+        return PlaylistEntity.builder()
+                .id(id)
+                .name("Test playlist")
+                .youtubeId("YoUTuBE0PlaYLisT2iD")
+                .build();
     }
 
     List<VideoEntity> buildTestVideoEntityList(long count, long playlistId) {

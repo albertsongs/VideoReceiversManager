@@ -14,11 +14,6 @@ public final class VideoEx extends Video {
         this.youtube = youtube;
     }
 
-    public VideoEx(VideoEntity entity, VideoMeta youtube) {
-        super(entity);
-        this.youtube = youtube;
-    }
-
     public VideoEx(VideoEntity entity) {
         super(entity);
         youtube = new VideoMeta(entity.getYoutubeId(), entity.getPlaylist().getYoutubeId());

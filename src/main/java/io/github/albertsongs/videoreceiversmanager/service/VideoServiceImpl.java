@@ -23,9 +23,7 @@ public class VideoServiceImpl implements VideoService {
     @Deprecated
     public Iterable<Video> getAllFromPlaylistById(Long playlistId) {
         final VideoEntity exemplaryVideoEntity = new VideoEntity();
-        final PlaylistEntity videoPlaylist = new PlaylistEntity();
-        videoPlaylist.setId(playlistId);
-        exemplaryVideoEntity.setPlaylist(videoPlaylist);
+        exemplaryVideoEntity.setPlaylist(PlaylistEntity.builder().id(playlistId).build());
         return videoRepo.findAll(Example.of(exemplaryVideoEntity), Sort.by(Sort.Order.asc("id")))
                 .stream()
                 .map(Video::new)

@@ -21,10 +21,11 @@ public class PlaylistTest {
 
     @Test
     void testConstructor() {
-        PlaylistEntity playlistEntity = new PlaylistEntity();
-        playlistEntity.setId(1234232L);
-        playlistEntity.setName("Test playlist");
-        playlistEntity.setYoutubeId("fh378fy389fu9dio2suf3iou");
+        PlaylistEntity playlistEntity = PlaylistEntity.builder()
+                .id(1234232L)
+                .name("Test playlist")
+                .youtubeId("fh378fy389fu9dio2suf3iou")
+                .build();
         Playlist playlist = new Playlist(playlistEntity);
         assertEquals(playlistEntity.getId(), playlist.getId());
         assertEquals(playlistEntity.getName(), playlist.getName());

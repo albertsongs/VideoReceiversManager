@@ -1,20 +1,23 @@
 package io.github.albertsongs.videoreceiversmanager.entity;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity(name = "playlist")
 @Data
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public final class PlaylistEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String name;
-    private String youtubeId;
+    Long id;
+    String name;
+    String youtubeId;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "playlist")
-    private List<VideoEntity> videos;
+    List<VideoEntity> videos;
 }

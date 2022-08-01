@@ -9,9 +9,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class VideoExTest {
     @Test
     void testConstructor(){
-        PlaylistEntity playlistEntity = new PlaylistEntity();
-        playlistEntity.setId(1234232L);
-        playlistEntity.setName("Test playlist");
+        PlaylistEntity playlistEntity = PlaylistEntity.builder()
+                .id(1234232L)
+                .name("Test playlist")
+                .build();
 
         VideoEntity videoEntity = new VideoEntity();
         videoEntity.setId(76532L);

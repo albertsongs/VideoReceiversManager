@@ -15,7 +15,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 class PlaylistServiceTest {
@@ -51,11 +52,11 @@ class PlaylistServiceTest {
     }
 
     PlaylistEntity buildTestPlaylistEntity() {
-        PlaylistEntity playlistEntity = new PlaylistEntity();
-        playlistEntity.setId(testPlaylistEntityCounter);
-        playlistEntity.setName("Test playlist " + testPlaylistEntityCounter++);
-        playlistEntity.setYoutubeId("YoUTuBE0PlaYLisT2iD");
-        return playlistEntity;
+        return PlaylistEntity.builder()
+                .id(testPlaylistEntityCounter)
+                .name("Test playlist " + testPlaylistEntityCounter++)
+                .youtubeId("YoUTuBE0PlaYLisT2iD")
+                .build();
     }
 
     List<PlaylistEntity> buildTestPlaylistEntityList() {
