@@ -18,6 +18,6 @@ public final class PlaylistEntity {
     Long id;
     String name;
     String youtubeId;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "playlist")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "playlist", fetch = FetchType.LAZY)
     List<VideoEntity> videos;
 }

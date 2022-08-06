@@ -15,7 +15,7 @@ public final class VideoEntity {
     Long id;
     String title;
     String youtubeId;
-    @ManyToOne()
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "playlist_id")
     PlaylistEntity playlist;
     String url;
