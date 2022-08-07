@@ -30,8 +30,8 @@ To deploy the project in docker container, follow these steps:
 
 ###
 
-    GET: /api/v1/receivers?isOnline=true
-    GET: /api/v1/receivers/{receiverId}?isOnline=false
+    GET: /api/v1.2/receivers?isOnline=true
+    GET: /api/v1.2/receivers/{receiverId}?isOnline=false
 
 ## New in APIv1.1
 
