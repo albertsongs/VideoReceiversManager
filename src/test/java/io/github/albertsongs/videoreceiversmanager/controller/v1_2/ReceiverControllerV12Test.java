@@ -7,6 +7,7 @@ import io.github.albertsongs.videoreceiversmanager.model.*;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
@@ -31,7 +32,10 @@ public class ReceiverControllerV12Test extends ReceiverControllerV11Test {
         final List<Receiver> receivers = buildReceivers();
         Mockito.doReturn(receivers)
                 .when(receiverService)
-                .getAll(Mockito.any(), Mockito.any());
+                .getAll(Mockito.any(Receiver.class), Mockito.any(Sort.Order.class));
+        Mockito.doReturn(true)
+                .when(receiverService)
+                .isReceiverOnline(Mockito.any(Receiver.class));
         receivers.sort((r1, r2) -> r2.getUpdatedAt().compareTo(r1.getUpdatedAt()));
         ObjectListContainer<Receiver> expectedVideosContainer = new ObjectListContainer<>(receivers);
 
@@ -42,7 +46,8 @@ public class ReceiverControllerV12Test extends ReceiverControllerV11Test {
         final String responseJson = mvcResult.getResponse().getContentAsString();
         assertEquals(HttpStatus.OK.value(), status);
         assertEquals(mapToJson(expectedVideosContainer), responseJson);
-        Mockito.verify(receiverService, Mockito.times(1)).getAll(Mockito.any(), Mockito.any());
+        Mockito.verify(receiverService, Mockito.times(1))
+                .getAll(Mockito.any(Receiver.class), Mockito.any(Sort.Order.class));
     }
 
     @Test
@@ -50,7 +55,7 @@ public class ReceiverControllerV12Test extends ReceiverControllerV11Test {
         final List<Receiver> receivers = buildReceivers();
         Mockito.doReturn(receivers)
                 .when(receiverService)
-                .getAll(Mockito.any(), Mockito.any());
+                .getAll(Mockito.any(Receiver.class), Mockito.any(Sort.Order.class));
         receivers.sort((r1, r2) -> r2.getUpdatedAt().compareTo(r1.getUpdatedAt()));
         ObjectListContainer<Receiver> expectedVideosContainer = new ObjectListContainer<>(receivers);
 
@@ -61,7 +66,8 @@ public class ReceiverControllerV12Test extends ReceiverControllerV11Test {
         final String responseJson = mvcResult.getResponse().getContentAsString();
         assertEquals(HttpStatus.OK.value(), status);
         assertEquals(mapToJson(expectedVideosContainer), responseJson);
-        Mockito.verify(receiverService, Mockito.times(1)).getAll(Mockito.any(), Mockito.any());
+        Mockito.verify(receiverService, Mockito.times(1))
+                .getAll(Mockito.any(Receiver.class), Mockito.any(Sort.Order.class));
     }
 
     @Test

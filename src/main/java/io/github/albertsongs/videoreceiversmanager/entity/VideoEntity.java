@@ -1,20 +1,23 @@
 package io.github.albertsongs.videoreceiversmanager.entity;
 
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
 
 @Entity(name = "video")
 @Data
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public final class VideoEntity {
     @Id
-    @GeneratedValue
-    private Long id;
-    private String title;
-    private String youtubeId;
-    @ManyToOne()
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long id;
+    String title;
+    String youtubeId;
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "playlist_id")
-    private PlaylistEntity playlist;
-    private String url;
-    private String subtitlesUrl;
+    PlaylistEntity playlist;
+    String url;
+    String subtitlesUrl;
 }

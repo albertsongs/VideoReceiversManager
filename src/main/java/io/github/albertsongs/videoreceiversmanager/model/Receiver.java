@@ -5,12 +5,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.github.albertsongs.videoreceiversmanager.entity.ReceiverEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 import java.util.UUID;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public final class Receiver {
     private UUID id;
     private String name;
