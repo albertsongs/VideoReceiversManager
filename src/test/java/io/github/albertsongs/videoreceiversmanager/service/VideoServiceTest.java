@@ -49,8 +49,8 @@ class VideoServiceTest {
 
     @Test
     void getAll() {
-        List<VideoEntity> videoEntityList = buildTestVideoEntityList(TestConfig.TEST_ENTITY_COUNT/2, 0);
-        videoEntityList.addAll(buildTestVideoEntityList(TestConfig.TEST_ENTITY_COUNT/2, 1));
+        List<VideoEntity> videoEntityList = buildTestVideoEntityList(TestConfig.TEST_ENTITY_COUNT / 2, 0);
+        videoEntityList.addAll(buildTestVideoEntityList(TestConfig.TEST_ENTITY_COUNT / 2, 1));
         Mockito.doReturn(videoEntityList)
                 .when(videoRepo)
                 .findAll();
