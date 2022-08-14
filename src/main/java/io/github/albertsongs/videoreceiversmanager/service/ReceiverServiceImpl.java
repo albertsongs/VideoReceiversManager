@@ -51,6 +51,7 @@ public final class ReceiverServiceImpl implements ReceiverService {
     }
 
     @Override
+    @Deprecated
     public Iterable<Receiver> getAll(Predicate<Receiver> filterPredicate, Comparator<Receiver> sortComparator) {
         return receiverRepo.findAll().stream()
                 .map(Receiver::new)

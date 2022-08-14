@@ -33,6 +33,7 @@ public interface ReceiverService {
 
     Boolean isReceiverOnline(Receiver receiver);
 
+    @Deprecated
     Iterable<Receiver> getAll(Predicate<Receiver> filterPredicate, Comparator<Receiver> sortComparator);
 
     List<Receiver> getAll(@NotNull Receiver exemplaryReceiver, Sort.Order sortOrder);
