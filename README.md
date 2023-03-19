@@ -17,10 +17,13 @@ of [the video player](https://albertsongs.github.io/tv) on the [albertsongs.gith
 
 To deploy the project in docker container, follow these steps:
 
-1. Copy file certificate.p12 to project subfolder ./cert or create it from .pem files:
-   `openssl pkcs12 -inkey key.pem -in certificate.pem -export -out certificate.p12 -CAfile caChain.pem -chain`
-2. Fill field SERVER_SSL_KEY_STORE_PASSWORD in docker-compose.yml
-3. Run init.sh
+1. Copy the file _**certificate.p12**_ to project subfolder _./cert_
+   * or create from _.pem_ files:
+     `openssl pkcs12 -export -in certificate.pem -inkey key.pem -out certificate.p12 -CAfile caChain.pem -chain`
+   * or create from _.crt_ files:
+     `openssl pkcs12 -export -in certificate.crt -inkey private.key -out certificate.p12 -CAfile ca_bundle.crt -chain`
+2. Fill the field _SERVER_SSL_KEY_STORE_PASSWORD_ in _**docker-compose.yml**_
+3. Run _**init.sh**_
 
 ## API Requests
 
